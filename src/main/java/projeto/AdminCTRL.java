@@ -45,13 +45,18 @@ public class AdminCTRL {
     
     public AdminCTRL(){}
 
-    public void setLoggedUser(User insLog) {
-        this.loggedUser = insLog;
-    }
+    //public void setLoggedUser(User insLog) {
+    //    this.loggedUser = insLog;
+    //}
 
     public void tela(User usrIns, Stage insTela ){
 
+        if (usrIns == null) {
+            usrIns = LoggedUser.getUser();
+        }
+
         if (usrIns.getFunção() == Permissoes.ADMINISTRADOR) {
+
             try {
                 this.stage = insTela;
                 this.loggedUser = usrIns;
@@ -70,12 +75,10 @@ public class AdminCTRL {
 
                 //Scene cena = new Scene(tela);
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }if (usrIns == null) {
-            System.out.println("user é nulo");
+
         }if (insTela == null) {
             System.out.println("tela é nula");
         }else{
@@ -95,7 +98,7 @@ public class AdminCTRL {
 
             Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
 
-            control.tela(this.loggedUser, currStage);
+            control.tela(LoggedUser.getUser(), currStage);
 
             Scene cena = new Scene(tela);
             currStage.setScene(cena);
@@ -141,6 +144,7 @@ public class AdminCTRL {
 
     public void sairTela(){
         //this.stage.close();
+        LoggedUser.deLog();
         this.loggedUser = null;
         this.stage.close();
     }

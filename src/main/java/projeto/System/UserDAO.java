@@ -9,6 +9,7 @@ import java.util.List;
 
 import projeto.System.Contracts.LivroInterface;
 import projeto.System.Contracts.PedidoInterface;
+import projeto.System.Contracts.UserInterface;
 import projeto.System.Models.Livro;
 import projeto.System.Models.Pedido;
 import projeto.System.Models.User;
@@ -16,7 +17,7 @@ import projeto.System.Models.valores.CodigoISBN;
 import projeto.System.Models.valores.Pagamentos;
 import projeto.System.Models.valores.Permissoes;
 
-public class UserDAO extends DAO implements LivroInterface, PedidoInterface {
+public class UserDAO extends DAO implements LivroInterface, PedidoInterface, UserInterface {
 
     private static UserDAO Instancia;
 
@@ -100,6 +101,43 @@ public class UserDAO extends DAO implements LivroInterface, PedidoInterface {
 
         estado.setString(4, insPedidoID.getID().toString());
 
+        estado.execute();
+        estado.close();
+    }
+
+    
+    @Override
+    public List<User> getUsers() throws SQLException {
+        
+        List<User> usuarios = new ArrayList<User>();
+
+        Statement estado = super.getConneccao().createStatement();
+        ResultSet valores = estado.executeQuery("select * from user");
+
+        while (valores.next()) {
+            Permissoes permissao = Permissoes.valueOf(valores.getString("permissao"));
+            
+            User usr = new User(valores.getString("nome"), 
+                valores.getString("email"), permissao);
+
+            if (usr.getFunção().equals(Permissoes.CLIENTE)) {
+                usuarios.add(usr);
+            }
+        }
+        return usuarios;
+    
+    }
+
+    @Override
+    public void adicionarUser(User insUser) throws SQLException {
+        //Somente adiciona cliente
+        PreparedStatement estado = super.getConneccao().prepareStatement("insert into user values(? , ? , ? , ? )");
+
+        estado.setString(1, insUser.getNome());
+        estado.setString(2, insUser.getEmail());
+        estado.setString(3, insUser.getID().toString());
+        estado.setString(4, Permissoes.CLIENTE.getPermissaoNome());
+    
         estado.execute();
         estado.close();
     }

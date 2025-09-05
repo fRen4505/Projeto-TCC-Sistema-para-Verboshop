@@ -26,7 +26,7 @@ public class Login {
     private Stage stage;
     private static InitDAO verificação = InitDAO.getInstancia(); 
 
-    private User usuarioAtual;
+    //private User usuarioAtual;
 
     private List<User> usuarios;
 
@@ -41,9 +41,9 @@ public class Login {
     @FXML
     private RadioButton adminButton, userButton;
     
-    public User getUsuarioAtual() {
-        return usuarioAtual;
-    }
+    //public User getUsuarioAtual() {
+    //    return usuarioAtual;
+    //}
 
     public Login(){}
 
@@ -96,7 +96,7 @@ public class Login {
     
                     if (adminButton.isSelected() && usr.getFunção() == Permissoes.ADMINISTRADOR ) {
     
-                        this.usuarioAtual = usr;
+                        LoggedUser.setLoggado(usr);
     
                         //System.out.println("True, usr: " + usr.getNome() + " " + usr.getID() + " " + usr.getFunção().getPermissaoNome());
     
@@ -106,29 +106,24 @@ public class Login {
                         AdminCTRL adminLog = loader.getController();
                         Stage currStage = (Stage)((Node)e.getSource()).getScene().getWindow();
                         
-                        adminLog.tela(this.usuarioAtual, currStage);
+                        adminLog.tela(LoggedUser.getUser(), currStage);
     
-                        //Parent tela = root;
                         Scene cena = new Scene(root);
                         currStage.setScene(cena);
                         currStage.show();
-                        //this.stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-                       // this.stage.setScene(cena);
-                       // this.stage.show();
     
+                        this.telaClose();
                         break;
                     }
                     if (userButton.isSelected() && usr.getFunção() == Permissoes.USUARIO ) {
     
-                        this.usuarioAtual = usr;
-    
-                        //System.out.println("True, usr: " + usr.getNome() + " " + usr.getID() + " " + usr.getFunção().getPermissaoNome());
-                        
+                        LoggedUser.setLoggado(usr);
+                            
                         loader = new FXMLLoader(getClass().getResource("/GUIs/UserGUI.fxml"));
                         root = loader.load();
                         
                         UserCTRL userLog = loader.getController();
-                        userLog.tela(this.usuarioAtual, this.stage);
+                        userLog.tela(LoggedUser.getUser(), this.stage);
     
                         Parent tela = root;
                         Scene cena = new Scene(tela);
@@ -136,7 +131,7 @@ public class Login {
                         this.stage.setScene(cena);
                         this.stage.show();
     
-    
+                        this.telaClose();
                         break;
                     }
     

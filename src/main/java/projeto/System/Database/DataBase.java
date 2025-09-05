@@ -20,7 +20,7 @@ public class DataBase {
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);
         
-            String SQLfile = SQLreader.carregarArquivo("/descricao.sql"); //<===inserir SQL aki
+            String SQLfile = SQLreader.carregarArquivo("/descricao.sql"); 
             statement.executeUpdate(SQLfile);
             
         } catch (Exception e) {
