@@ -11,14 +11,13 @@ public class CodigoISBN {
     }
 
     public CodigoISBN(String codeIns){
-        try {
-            if (ISBNValidator.getInstance().isValid(codeIns) == true) {
-                this.ISBN = codeIns;    
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }        
-
+        if (ISBNValidator.getInstance().isValid(codeIns) == true) {
+            this.ISBN = codeIns;    
+        }else{
+            this.ISBN = null;
+            throw new IllegalArgumentException("ISBN inserido invalido");
+        }
+       
     }
 
 }

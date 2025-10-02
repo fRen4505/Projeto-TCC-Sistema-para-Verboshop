@@ -21,7 +21,6 @@ public class InitDAO extends DAO implements UserInterface {
 
     public static InitDAO getInstancia(){
         if (Instancia == null) {
-
             Instancia = new InitDAO(new User("ini", "ini", Permissoes.INIT), Permissoes.INIT);
             return Instancia;
         } else {
@@ -40,12 +39,14 @@ public class InitDAO extends DAO implements UserInterface {
         while (valores.next()) {
             Permissoes permissao = Permissoes.valueOf(valores.getString("permissao"));
             
-            User usr = new User(valores.getString("nome"), 
-                valores.getString("email"), permissao);
+            User usr = new User(
+                valores.getString("nome"), 
+                valores.getString("email"), permissao
+            );
 
             usuarios.add(usr);
         }
-        
+
         return usuarios;
     }
 

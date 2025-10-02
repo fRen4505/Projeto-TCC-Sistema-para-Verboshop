@@ -16,7 +16,7 @@ public class User {
         this.Nome = insNome;
         this.Email = new Email(insEmail); 
         this.Função = insPermissão;
-        this.ID = new UUID(900, 9000);
+        this.ID = UUID.randomUUID();
     }
 
     public String getNome() {

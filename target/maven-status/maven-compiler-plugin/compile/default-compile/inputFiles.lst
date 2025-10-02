@@ -1,7 +1,8 @@
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\AdminCTRL.java
-C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\CadastroInicial.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\UserPane.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Login.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Main.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Sessao.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\AdminDAO.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Contracts\LivroAdminInterface.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Contracts\LivroInterface.java
@@ -20,6 +21,7 @@ C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\M
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Email.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Pagamentos.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Permissoes.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Services\EmailSender.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Services\Relatorio.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\UserDAO.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\UserCTRL.java

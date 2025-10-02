@@ -137,12 +137,13 @@ public class AdminDAO extends DAO implements LivroAdminInterface, LivroInterface
     @Override // <<< ======================================== JA FEITO
     public void adicionarLivro(Livro livroIns) throws SQLException {
 
-        PreparedStatement estado = super.getConneccao().prepareStatement(" insert into livro values( ? , ? , ? , ? , ? ) ");
+        PreparedStatement estado = super.getConneccao().prepareStatement(" insert into livro values( ? , ? , ? , ? , ? , ? ) ");
         estado.setString(1, livroIns.getTitulo());
         estado.setString(2, livroIns.getAutor());
         estado.setString(3, livroIns.getEditora());
         estado.setString(4, livroIns.getISBN().getISBN());
         estado.setDouble(5, livroIns.getPreço().doubleValue());
+        estado.setInt(6, livroIns.getQuantidade());
 
         estado.execute();
         estado.close();

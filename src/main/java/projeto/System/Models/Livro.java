@@ -12,7 +12,7 @@ public class Livro {
     private String Editora;
     private CodigoISBN ISBN;
     private Dinheiro Preço;
-    private Integer Quantidade;
+    private Integer Quantidade = 0;
 
     public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, String insCodigo) {
         this.Titulo = insTitulo;

@@ -96,17 +96,15 @@ public class Login {
     
                     if (adminButton.isSelected() && usr.getFunção() == Permissoes.ADMINISTRADOR ) {
     
-                        LoggedUser.setLoggado(usr);
-    
-                        //System.out.println("True, usr: " + usr.getNome() + " " + usr.getID() + " " + usr.getFunção().getPermissaoNome());
-    
+                        Sessao.setLoggado(usr);
+        
                         loader = new FXMLLoader(getClass().getResource("/GUIs/AdminGUI.fxml"));
                         root = loader.load();
                         
                         AdminCTRL adminLog = loader.getController();
                         Stage currStage = (Stage)((Node)e.getSource()).getScene().getWindow();
                         
-                        adminLog.tela(LoggedUser.getUser(), currStage);
+                        adminLog.tela(Sessao.getUser(), currStage);
     
                         Scene cena = new Scene(root);
                         currStage.setScene(cena);
@@ -117,19 +115,19 @@ public class Login {
                     }
                     if (userButton.isSelected() && usr.getFunção() == Permissoes.USUARIO ) {
     
-                        LoggedUser.setLoggado(usr);
+                        Sessao.setLoggado(usr);
                             
                         loader = new FXMLLoader(getClass().getResource("/GUIs/UserGUI.fxml"));
                         root = loader.load();
                         
                         UserCTRL userLog = loader.getController();
-                        userLog.tela(LoggedUser.getUser(), this.stage);
+                        Stage currStage = (Stage)((Node)e.getSource()).getScene().getWindow();
+
+                        userLog.tela(Sessao.getUser(), this.stage);
     
-                        Parent tela = root;
-                        Scene cena = new Scene(tela);
-                        this.stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-                        this.stage.setScene(cena);
-                        this.stage.show();
+                        Scene cena = new Scene(root);
+                        currStage.setScene(cena);
+                        currStage.show();
     
                         this.telaClose();
                         break;

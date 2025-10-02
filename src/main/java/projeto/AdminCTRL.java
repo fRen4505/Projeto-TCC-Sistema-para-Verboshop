@@ -1,6 +1,6 @@
 package projeto;
 
-import java.util.Scanner;
+import com.gluonhq.charm.glisten.control.CardPane;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,12 +8,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+
+import java.sql.SQLException;
 import java.util.List;
+
+import org.apache.commons.validator.routines.ISBNValidator;
+
+import projeto.Interfaces.LivroPane;
+import projeto.Interfaces.UserPane;
 import projeto.System.AdminDAO;
 import projeto.System.Models.User;
 import projeto.System.Models.valores.Permissoes;
@@ -27,32 +37,29 @@ public class AdminCTRL {
     @FXML
     private Button usersPage, livrosPage, pedidosPage, novoUser, novoLivro, voltar, sair;
     @FXML
-    private TextField insNome, insMail, insTitulo, insAutor, insEdit, insCode, insPreco  ;
+    private TextField insNome, insMail, insTitulo, insAutor, insEdit, insCode, insPreco ;
     @FXML
     private RadioButton insAdmin, insUser, insClient;
     @FXML
-    private Button alterar, deletar;
-    @FXML
     private Label userName = new Label();
-
+    @FXML
+    private VBox users, livList;
 
     private User loggedUser;
     private AdminDAO dao;
 
+    private Alert alert = new Alert(Alert.AlertType.ERROR);
+                
     private List<User> usuarios;
     private List<Livro> livros;
     private List<Pedido> pedidos;
     
     public AdminCTRL(){}
 
-    //public void setLoggedUser(User insLog) {
-    //    this.loggedUser = insLog;
-    //}
-
-    public void tela(User usrIns, Stage insTela ){
+    public void tela(User usrIns, Stage insTela){
 
         if (usrIns == null) {
-            usrIns = LoggedUser.getUser();
+            usrIns = Sessao.getUser();
         }
 
         if (usrIns.getFunção() == Permissoes.ADMINISTRADOR) {
@@ -60,20 +67,13 @@ public class AdminCTRL {
             try {
                 this.stage = insTela;
                 this.loggedUser = usrIns;
-                this.dao = AdminDAO.getInstancia(this.loggedUser);
+                this.dao = (AdminDAO) Sessao.getDAO();
 
                 this.userName.setText(this.userName.getText() + loggedUser.getNome());
-
-                //this.stage.setScene(cena);
-                //this.stage.setTitle("Gerenciamento");
-
-                //FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminGUI.fxml"));
-                //Parent tela = loader.load();                
-                
+                this.stage.setTitle("Gerenciamento");
+         
                 //AdminCTRL control = loader.getController();
                 //control.setLoggedUser(usrIns);
-
-                //Scene cena = new Scene(tela);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -98,40 +98,12 @@ public class AdminCTRL {
 
             Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
 
-            control.tela(LoggedUser.getUser(), currStage);
+            control.tela(Sessao.getUser(), currStage);
+            this.dao = (AdminDAO) Sessao.getDAO();
 
             Scene cena = new Scene(tela);
             currStage.setScene(cena);
             currStage.show();
-            //this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
-            //this.stage.setScene(cena);
-            //this.stage.show();
-
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-    }
-
-    public void usersTela(ActionEvent e){
-        try {
-            Parent tela = FXMLLoader.load(getClass().getResource("/GUIs/AdminUserGUI.fxml"));
-            Scene cena = new Scene(tela);
-            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
-            this.stage.setScene(cena);
-            this.stage.show();
-
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-    }
-
-    public void livrosTela(ActionEvent e){
-        try {
-            Parent tela = FXMLLoader.load(getClass().getResource("/GUIs/AdminLivroGUI.fxml"));
-            Scene cena = new Scene(tela);
-            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
-            this.stage.setScene(cena);
-            this.stage.show();
 
         } catch (Exception e1) {
             e1.printStackTrace();
@@ -143,123 +115,134 @@ public class AdminCTRL {
     }
 
     public void sairTela(){
-        //this.stage.close();
-        LoggedUser.deLog();
+        Sessao.deLog();
         this.loggedUser = null;
         this.stage.close();
     }
 
-    public void controle(){
-
-        /*
-        try {
-                
-            dao = AdminDAO.getInstancia(loggedUser);
-
-            String input = "";
-
-            while (input != "s") {
-                
-                System.out.println("\t \t ->>Insira o que deseja realizar<<- \n \tl.gerenciar Livros \tu.gerenciar Usuarios \tp.gerenciar Pedidos");
-                input = scan.nextLine();
-
-                switch (input) {
-                    case "l":
-
-                        String livInput = "";
-                        
-                        List<Livro> livrosCadastrados = dao.getLivros();
-
-                        System.out.println("Livros: \n=================================================================================");
-                        for (Livro livro : livrosCadastrados) {
-                            if (livro != null) {
-                                int i = 0;
-                                System.out.println(
-                                    "Numero: " + i +
-                                    "\nLivro: " + livro.getTitulo() + " | Editora: "+ livro.getEditora()+ " | Autor" +livro.getAutor()+
-                                    "\nISBN: " + livro.getISBN() + " | Quantidade: "+ livro.getQuantidade() + " | Preço: " + livro.getPreço()+
-                                    "\n================================================================================="
-                                );
-                                i = i + 1;   
-                            }if (livrosCadastrados.isEmpty()) {
-                                System.out.println("Não há livros");
-                                break;
-                            }
-                        }
-
-                        int ins;
-                        System.out.println("\t \t ->>Digite qual opcao deseja<<- \n \td.Deletar livro \tm.Modificar livro \ta.Adicionar livro");
-                        livInput = scan.nextLine();
-                        switch (livInput) {
-                            case "d":
-                                System.out.println("digite o numero do livro que se deseja deletar:");
-                                ins = scan.nextInt();
-
-                                dao.deletarLivro(livrosCadastrados.get(ins).getISBN());
-                                break;
-                        
-                            case "m":
-                                System.out.println("digite o numero do livro que se deseja alterar:");
-                                ins = scan.nextInt();
-
-                                System.out.println("insira novo titulo: ");
-
-                                System.out.println("digite novo autor: ");
-
-                                System.out.println("");
-
-
-                                break;
-
-                            case "a":
-
-                                break;
-                        }
-
-                        break;
-                    case "u":
-
-                        break;
-                    case "p":
-
-                        break;
-                    default:
-                        break;
-                }
-
-
-            }
-
-        */
-    
-    }
-
     //===============================METODOS PARA USUARIOS===============================
 
-    public void userDelete(ActionEvent e){
 
+    public void usersTela(ActionEvent e){
+        try {
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminUserGUI.fxml"));
+            Parent tela = loader.load();
+            AdminCTRL ctrl = loader.getController();
+
+            Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
+            
+            ctrl.tela(Sessao.getUser(), currStage);
+            this.dao = (AdminDAO) Sessao.getDAO();
+
+            usuarios = ctrl.dao.getUsers();
+
+            for (User usr : usuarios) {
+                System.out.println("Nome: " + usr.getNome());
+
+                UserPane pane = new UserPane();
+                Pane usrPane = pane.painel(usr,this.dao);
+
+                ctrl.users.getChildren().add(usrPane);
+            }
+
+            Scene cena = new Scene(tela);
+            ctrl.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
+            ctrl.stage.setScene(cena);
+            ctrl.stage.show();
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
     }
 
-    public void userAlterar(ActionEvent e){
-
-    }
 
     public void userNovo(ActionEvent e){
 
+        String username = insNome.getText();
+        String email = insMail.getText();
+        Permissoes permissao = null;
+        User novo;
+
+        if (novoUser.isArmed()) {
+        
+            if (insAdmin.isSelected()) {
+                permissao = Permissoes.ADMINISTRADOR;
+            }if (insUser.isSelected()) {
+                permissao = Permissoes.USUARIO;
+            }if (insClient.isSelected()) {
+                permissao = Permissoes.CLIENTE;  
+            }
+
+            novo = new User(username, email, permissao);
+
+            try {
+                this.dao.adicionarUser(novo);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        
     }
 
     //===============================METODOS PARA LIVROS===============================
 
-    public void livroDelete(ActionEvent e){
+    public void livrosTela(ActionEvent e){
+        try {
 
-    }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminLivroGUI.fxml"));
+            Parent tela = loader.load();
+            AdminCTRL ctrl = loader.getController();
 
-    public void livroAlterar(ActionEvent e){
+            Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
+            
+            ctrl.tela(Sessao.getUser(), currStage);
+            this.dao = (AdminDAO) Sessao.getDAO();
 
+            livros = ctrl.dao.getLivros();
+
+            for (Livro liv : livros) {
+                System.out.println("Titulo: " + liv.getTitulo());
+
+                LivroPane pane = new LivroPane();
+                Pane libPane = pane.painel(liv, this.dao);
+
+                ctrl.livList.getChildren().add(libPane);
+            }
+
+            Scene cena = new Scene(tela);
+            ctrl.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
+            ctrl.stage.setScene(cena);
+            ctrl.stage.show();
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
     }
 
     public void livroNovo(ActionEvent e){
-        
+
+        String titulo = insTitulo.getText();
+        String autor = insAutor.getText();
+        String editora = insEdit.getText();
+        String isbn = insCode.getText();
+        double valor = Double.valueOf(insPreco.getText());
+
+        try {
+            Livro novo = new Livro(titulo, autor, editora, valor, isbn);
+
+            try {
+                this.dao.adicionarLivro(novo);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        } catch (IllegalArgumentException ia) {
+            alert.setTitle("Erro");
+            alert.setHeaderText(null);
+            alert.setContentText( ia.getMessage() + ", cadastro cancelado");
+            alert.showAndWait();
+        }
+
     }
 
     //===============================METODOS PARA PEDIDOS===============================
