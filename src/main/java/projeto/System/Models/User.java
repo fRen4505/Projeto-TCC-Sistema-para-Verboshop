@@ -1,7 +1,6 @@
 package projeto.System.Models;
 
 import java.util.UUID;
-
 import projeto.System.Models.valores.Permissoes;
 import projeto.System.Models.valores.Email;
 
@@ -12,11 +11,32 @@ public class User {
     private Permissoes Função;
     private UUID ID;
 
-    public User(String insNome, String insEmail, Permissoes insPermissão) {
-        this.Nome = insNome;
-        this.Email = new Email(insEmail); 
-        this.Função = insPermissão;
-        this.ID = UUID.randomUUID();
+    public User(String insNome, String insEmail, Permissoes insPermissão){
+        try {
+            if(insNome != "" && insEmail != "") {
+                this.Nome = insNome;
+                this.Email = new Email(insEmail); 
+                this.Função = insPermissão;
+                this.ID = UUID.randomUUID();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // TODO: handle exception
+        }
+    }
+
+    public User(String insNome, String insEmail, String insID, Permissoes insPermissão){
+        try {
+            if(insNome != "" && insEmail != "" && insID != "") {
+                this.Nome = insNome;
+                this.Email = new Email(insEmail); 
+                this.Função = insPermissão;
+                this.ID = UUID.fromString(insID);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // TODO: handle exception
+        }
     }
 
     public String getNome() {

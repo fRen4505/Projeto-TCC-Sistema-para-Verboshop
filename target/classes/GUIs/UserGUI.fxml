@@ -60,7 +60,7 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
             <Button fx:id="livrosPage" mnemonicParsing="false" onAction="#livrosTela" text="Livros" />
-            <Button fx:id="pedidosPage" mnemonicParsing="false" text="Pedidos" />
+            <Button fx:id="pedidosPage" mnemonicParsing="false" onAction="#pedidosTela" text="Pedidos" />
             <Button fx:id="voltar" mnemonicParsing="false" onAction="#initUSRtela" text="Voltar" />
         </buttons>
       </ButtonBar>

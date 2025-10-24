@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<DialogPane prefHeight="106.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <Pane prefHeight="100.0" prefWidth="300.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="49.0" layoutY="6.0" prefWidth="50.0" text="Nome" textAlignment="CENTER" />
+            <Separator layoutY="55.0" prefHeight="18.0" prefWidth="300.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="196.0" layoutY="6.0" prefWidth="50.0" text="Email" textAlignment="CENTER" />
+            <TextField fx:id="insNome" layoutX="10.0" layoutY="30.0" prefHeight="25.0" prefWidth="130.0" />
+            <TextField fx:id="insMail" layoutX="160.0" layoutY="30.0" prefHeight="25.0" prefWidth="130.0" />
+         </children>
+      </Pane>
+   </content>
+</DialogPane>

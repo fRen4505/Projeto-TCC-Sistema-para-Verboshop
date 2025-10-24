@@ -41,7 +41,9 @@ public class InitDAO extends DAO implements UserInterface {
             
             User usr = new User(
                 valores.getString("nome"), 
-                valores.getString("email"), permissao
+                valores.getString("email"),
+                valores.getString("id"), 
+                permissao
             );
 
             usuarios.add(usr);

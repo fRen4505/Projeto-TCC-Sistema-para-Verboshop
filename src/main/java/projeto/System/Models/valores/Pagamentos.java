@@ -2,7 +2,7 @@ package projeto.System.Models.valores;
 
 public enum Pagamentos {
 
-    DINHEIRO("dinheiro"), CARTAO("cartao"), PIX("pix");
+    DINHEIRO("dinheiro"), DEBITO("cartao de debito"), CREDITO("cartao de credito"), PIX("pix");
 
     private String metodo;
 

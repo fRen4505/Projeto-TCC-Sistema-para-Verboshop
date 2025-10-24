@@ -18,6 +18,8 @@ public class DataBase {
             connection = DriverManager.getConnection("jdbc:sqlite::resource:" + Main.class.getResource("/banco.db"));
 
             Statement statement = connection.createStatement();
+
+            statement.execute("PRAGMA foreign_keys = ON;");
             statement.setQueryTimeout(30);
         
             String SQLfile = SQLreader.carregarArquivo("/descricao.sql"); 

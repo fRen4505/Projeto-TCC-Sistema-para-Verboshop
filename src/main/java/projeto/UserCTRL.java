@@ -1,6 +1,9 @@
 package projeto;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,13 +13,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import projeto.System.AdminDAO;
+import projeto.Interfaces.CadastroPedido;
+import projeto.Interfaces.LivroPane;
+import projeto.Interfaces.NovoClientePane;
+import projeto.Interfaces.NovoLotePane;
+import projeto.Interfaces.PedidoPane;
 import projeto.System.UserDAO;
 import projeto.System.Models.Livro;
 import projeto.System.Models.Pedido;
 import projeto.System.Models.User;
+import projeto.System.Models.valores.Pagamentos;
 import projeto.System.Models.valores.Permissoes;
 
 public class UserCTRL {
@@ -24,98 +35,266 @@ public class UserCTRL {
     private Stage stage = new Stage();
 
     @FXML
-    private Button livrosPage, pedidosPage, voltar, sair;
+    private Button livrosPage, pedidosPage, voltar, sair, novoPedido, novoCliente, novoLote;
     @FXML
     private RadioButton insAdmin, insUser, insClient;
     @FXML
     private Button alterar, deletar;
     @FXML
-    private Label userName;
+    private Label userName = new Label();
+    @FXML
+    private VBox livList, pedList; //= new VBox();
 
-    
+    @FXML
+    private Label livroQtnd = new Label("Livros: ");
+    @FXML
+    private Label totalLivros = new Label("Total de livros: ");
+    @FXML
+    private Label livrosNone = new Label("Livros sem quantidade no estoque: ");
+
+    @FXML
+    private Label pedidoCartao = new Label("Pedidos com cartão: ");
+    @FXML
+    private Label pedidoDinher = new Label("Pedidos com dinheiro: ");
+    @FXML
+    private Label pedidoPIX = new Label("Pedidos com PIX: ");
+    @FXML
+    private Label qtndPedido = new Label("Pedidos: ");
+
+    @FXML
+    private ListView<String> clientList;
+
     private User loggedUser;
     private UserDAO dao;
 
     private List<Livro> livros;
     private List<Pedido> pedidos;
+    private List<User> usuarios;
 
     public UserCTRL(){}
 
     public void tela(User usrIns, Stage insTela){
 
+        if (usrIns == null) {
+            usrIns = Sessao.getUser();
+        }
+
         if (usrIns.getFunção() == Permissoes.USUARIO) {
             try {
                 this.stage = insTela;
                 this.loggedUser = usrIns;
-                this.dao = UserDAO.getInstancia(loggedUser);
+                this.dao = (UserDAO) Sessao.getDAO();
 
                 this.userName.setText(this.userName.getText() + loggedUser.getNome());
                 this.stage.setTitle("Gerenciamento");
-                Parent tela = FXMLLoader.load(getClass().getResource("/GUIs/UserGUI.fxml"));
-                Scene cena = new Scene(tela);
-                this.stage.setScene(cena);
-
+                
             } catch (Exception e) {
                 e.printStackTrace();
+                // TODO Auto-generated catch block
             }
 
+        }if (insTela == null) {
+            System.out.println("tela é nula");
         }else{
             this.stage.close();
         }
     }
 
-    
     //===============================METODOS PARA GUI===============================
 
     public void initUSRtela(ActionEvent e){
         try {
-            Parent tela = FXMLLoader.load(getClass().getResource("/GUIs/UserGUI.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserGUI.fxml"));
+            Parent tela = loader.load();                
+                
+            UserCTRL control = loader.getController();
+
+            Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
+
+            control.tela(Sessao.getUser(), currStage);
+            this.dao = (UserDAO) Sessao.getDAO();
+
             Scene cena = new Scene(tela);
-            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
-            this.stage.setScene(cena);
-            this.stage.show();
+            currStage.setScene(cena);
+            currStage.show();
 
         } catch (Exception e1) {
             e1.printStackTrace();
+            // TODO Auto-generated catch block
         }
-    }
-
-    
-    public void livrosTela(ActionEvent e){
-        try {
-            Parent tela = FXMLLoader.load(getClass().getResource("/GUIs/UserLivroGUI.fxml"));
-            Scene cena = new Scene(tela);
-            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
-            this.stage.setScene(cena);
-            this.stage.show();
-
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-    }
-
-    public void pedidosTela(ActionEvent e){
-
     }
 
     public void sairTela(){
-        //this.stage.close();
+        Sessao.deLog();
         this.loggedUser = null;
+        this.stage.close();
     }
 
+    //===============================METODOS PARA LIVROS===============================
+    
+    public void livrosTela(ActionEvent e){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserLivroGUI.fxml"));
+            Parent tela = loader.load();
+            UserCTRL ctrl = loader.getController();
+            this.stage.setTitle("Gerenciamento de livros");
+            
+            Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
+
+            ctrl.tela(Sessao.getUser(), currStage);
+            this.dao = (UserDAO) Sessao.getDAO();
+            
+            int val = 0;
+            int total = 0;
+
+            livros = ctrl.dao.getLivros();
+            for (Livro livro : livros) {
+                if(livro.getQuantidade() == 0){
+                    val = val + 1;
+                }
+                total = total + livro.getQuantidade(); 
+
+                Pane livPane = new LivroPane().painel(livro);
+                ctrl.livList.getChildren().add(livPane);
+            }
+            
+            ctrl.totalLivros.setText(ctrl.totalLivros.getText() + total);
+            ctrl.livroQtnd.setText(ctrl.livroQtnd.getText() + livros.size());
+            ctrl.livrosNone.setText(ctrl.livrosNone.getText() + val);
+
+            Scene cena = new Scene(tela);
+            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
+            this.stage.setScene(cena);
+            this.stage.show();
+
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+
+    public void novoLote(ActionEvent e){
+
+        try {
+            
+            Optional<ArrayList<Livro>> lote = new NovoLotePane(
+                this.dao.getLivros()
+            ).showAndWait();
+
+            lote.ifPresent(loteContent ->{
+                for (Livro loteLivro : loteContent) {
+                    try {
+                        this.dao.alterarLivro(loteLivro.getISBN(), loteLivro);
+                    } catch (SQLException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+            });
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            // TODO: handle exception
+        }
+
+    }
 
     //===============================METODOS PARA PEDIDOS===============================
 
+    public void pedidosTela(ActionEvent e){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserPedidoGUI.fxml"));
+            Parent tela = loader.load();
+            UserCTRL ctrl = loader.getController();
+            this.stage.setTitle("Gerenciamento de pedidos");
+            
+            Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
+
+            ctrl.tela(Sessao.getUser(), currStage);
+            this.dao = (UserDAO) Sessao.getDAO();
+            
+            int pix = 0;
+            int cartao = 0;
+            int dinheiro = 0;
+
+            ctrl.pedList.setSpacing(27.5);
+
+            pedidos = ctrl.dao.getPedidos();
+            for (Pedido pedido : pedidos) {
+                if (pedido.getPagamento() == Pagamentos.DINHEIRO) {
+                    dinheiro = dinheiro + 1;
+                }
+                if (pedido.getPagamento() == Pagamentos.PIX) {
+                    pix = pix + 1;
+                }
+                if (pedido.getPagamento() == Pagamentos.CREDITO || pedido.getPagamento() == Pagamentos.DEBITO) {
+                    cartao = cartao + 1;
+                }
+
+                Pane pedPane = new PedidoPane().painel(pedido);
+                ctrl.pedList.getChildren().add(pedPane);
+            }
+
+            ctrl.qtndPedido.setText(ctrl.qtndPedido.getText()+pedidos.size());
+            ctrl.pedidoDinher.setText(ctrl.pedidoDinher.getText()+dinheiro);
+            ctrl.pedidoPIX.setText(ctrl.pedidoPIX.getText() + pix);
+            ctrl.pedidoCartao.setText(ctrl.pedidoCartao.getText() + cartao);
+
+            usuarios = ctrl.dao.getUsers();
+            for (User user : usuarios) {
+                if (user.getFunção() == Permissoes.CLIENTE) {
+                    ctrl.clientList.getItems().add("Nome: " + user.getNome() );
+                }
+            }
+
+            Scene cena = new Scene(tela);
+            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
+            this.stage.setScene(cena);
+            this.stage.show();
+
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+
+    }
+
     public void pedidoNovo(ActionEvent e){
-
+        try {
+            Optional<Pedido> cadastro = new CadastroPedido(
+                this.dao.getLivros(),
+                this.dao.getUsers()
+            ).showAndWait();
+            
+            cadastro.ifPresent(novo ->{
+                try {
+                    this.dao.criarPedido(novo);
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
+       
+        } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
     }
 
-    public void pedidoDeletar(ActionEvent e){
-
-    }
-
-    public void pedidoAlterar(ActionEvent e){
-
+    public void clienteNovo(ActionEvent e){
+        NovoClientePane dialog = new NovoClientePane();
+        Optional<User> cadastrado = dialog.showAndWait();
+        
+        cadastrado.ifPresent(novo -> {
+            try {
+                this.dao.adicionarUser(novo);
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        });
+        
     }
     
 }

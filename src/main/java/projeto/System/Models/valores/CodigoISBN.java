@@ -6,7 +6,7 @@ public class CodigoISBN {
     
     private String ISBN;
 
-    public String getISBN() {
+    public String valorISBN() {
         return ISBN;
     }
 

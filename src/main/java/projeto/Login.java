@@ -14,8 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-//import javafx.scene.image.Image;
-//import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import projeto.System.InitDAO;
 import projeto.System.Models.User;
@@ -123,7 +121,7 @@ public class Login {
                         UserCTRL userLog = loader.getController();
                         Stage currStage = (Stage)((Node)e.getSource()).getScene().getWindow();
 
-                        userLog.tela(Sessao.getUser(), this.stage);
+                        userLog.tela(Sessao.getUser(), currStage);
     
                         Scene cena = new Scene(root);
                         currStage.setScene(cena);
@@ -141,62 +139,6 @@ public class Login {
             }
     
         }
-
-        /*for (User usr : this.usuarios) {
-
-            if (usr.getNome().equals(logName) && usr.getEmail().equals(logMail) ) {
-
-                if (adminButton.isSelected() && usr.getFunção() == Permissoes.ADMINISTRADOR ) {
-
-                    this.usuarioAtual = usr;
-
-                    System.out.println("True, usr: " + usr.getNome() + " " + usr.getID() + " " + usr.getFunção().getPermissaoNome());
-
-                    loader = new FXMLLoader(getClass().getResource("/GUIs/AdminGUI.fxml"));
-                    root = loader.load();
-                    
-                    AdminCTRL adminLog = loader.getController();
-                    adminLog.tela(this.usuarioAtual, this.stage);
-
-                    Parent tela = root;
-                    Scene cena = new Scene(tela);
-                    this.stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-                    this.stage.setScene(cena);
-                    this.stage.show();
-
-                    break;
-                }
-                if (userButton.isSelected() && usr.getFunção() == Permissoes.USUARIO ) {
-
-                    this.usuarioAtual = usr;
-
-                    System.out.println("True, usr: " + usr.getNome() + " " + usr.getID() + " " + usr.getFunção().getPermissaoNome());
-                    
-                    loader = new FXMLLoader(getClass().getResource("/GUIs/UserGUI.fxml"));
-                    root = loader.load();
-                    
-                    UserCTRL userLog = loader.getController();
-                    userLog.tela(this.usuarioAtual, this.stage);
-
-                    Parent tela = root;
-                    Scene cena = new Scene(tela);
-                    this.stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-                    this.stage.setScene(cena);
-                    this.stage.show();
-
-
-                    break;
-                }
-
-            }else{
-                System.out.println("false");
-                System.out.println(logFuncao);
-            }
-
-        }
-
-        */ //this.telaClose();
-
     }
 
     public void CadastradoInicial(ActionEvent e){

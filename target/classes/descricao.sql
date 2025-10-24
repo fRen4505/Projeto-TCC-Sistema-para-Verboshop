@@ -31,16 +31,18 @@ CREATE TABLE IF NOT EXISTS livro(
 	"editora"	TEXT NOT NULL,
 	"isbn"	TEXT NOT NULL UNIQUE,
 	"dinheiro"	REAL NOT NULL,
-	"quantidade"	INTEGER,
+	"quantidade" INTEGER NOT NULL,
 	PRIMARY KEY("isbn")
 );
 
-CREATE TABLE IF NOT EXISTS pedido(
-    "criadorID"	TEXT NOT NULL UNIQUE,
-	"clienteID"	TEXT NOT NULL UNIQUE,
+CREATE TABLE IF NOT EXISTS "pedido" (
+	"criadorID"	TEXT NOT NULL,
+	"clienteID"	TEXT NOT NULL,
 	"metodoPagamento"	TEXT NOT NULL,
 	"data"	TEXT NOT NULL,
 	"livrosCodigo"	TEXT,
-	PRIMARY KEY("clienteID","criadorID"),
-	FOREIGN KEY("livrosCodigo") REFERENCES "livro"("isbn")
+	"ID"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("ID"),
+	FOREIGN KEY("clienteID") REFERENCES "user(id)" ON DELETE RESTRICT ON UPDATE CASCADE,
+	FOREIGN KEY("criadorID") REFERENCES "user(id)" ON DELETE RESTRICT ON UPDATE CASCADE
 );

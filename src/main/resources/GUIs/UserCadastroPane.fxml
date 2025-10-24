@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+
+<DialogPane prefHeight="190.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <Pane prefHeight="170.0" prefWidth="300.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="49.0" layoutY="6.0" prefWidth="50.0" text="Nome" textAlignment="CENTER" />
+            <Separator layoutY="55.0" prefHeight="18.0" prefWidth="300.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="196.0" layoutY="6.0" prefWidth="50.0" text="Email" textAlignment="CENTER" />
+            <Separator layoutY="130.0" prefHeight="18.0" prefWidth="300.0" />
+            <TextField fx:id="insNome" layoutX="10.0" layoutY="30.0" prefHeight="25.0" prefWidth="130.0" />
+            <TextField fx:id="insMail" layoutX="160.0" layoutY="30.0" prefHeight="25.0" prefWidth="130.0" />
+            <RadioButton fx:id="insClient" layoutX="211.0" layoutY="110.0" mnemonicParsing="false" prefHeight="20.0" text="Cliente" />
+            <RadioButton fx:id="insAdmin" layoutX="26.0" layoutY="110.0" mnemonicParsing="false" prefHeight="20.0" text="Administrador" />
+            <RadioButton fx:id="insUser" layoutX="134.0" layoutY="110.0" mnemonicParsing="false" prefHeight="20.0" text="Usuario" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="100.0" layoutY="77.0" prefWidth="100.0" text="Cargo/Função" textAlignment="CENTER" />
+         </children>
+      </Pane>
+   </content>
+</DialogPane>

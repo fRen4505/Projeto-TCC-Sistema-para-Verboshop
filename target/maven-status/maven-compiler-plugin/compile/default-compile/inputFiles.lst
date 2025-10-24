@@ -1,4 +1,14 @@
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\AdminCTRL.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\AlterarLivro.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\AlterarPedido.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\AlterarUser.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\CadastrarLivro.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\CadastroPedido.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\CadastroUser.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\LivroPane.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\NovoClientePane.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\NovoLotePane.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\PedidoPane.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\UserPane.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Login.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Main.java
@@ -21,7 +31,5 @@ C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\M
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Email.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Pagamentos.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Permissoes.java
-C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Services\EmailSender.java
-C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Services\Relatorio.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\UserDAO.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\UserCTRL.java

@@ -22,6 +22,23 @@ public class Livro {
         this.ISBN = new CodigoISBN(insCodigo);
     }
 
+    public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, Integer insQtnd) {
+        this.Titulo = insTitulo;
+        this.Autor = insAutor;
+        this.Editora = insEdit;
+        this.Preço = new Dinheiro(insPreço);
+        this.Quantidade = insQtnd;
+    }
+
+    public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, Integer insQtnd, String insCodigo) {
+        this.Titulo = insTitulo;
+        this.Autor = insAutor;
+        this.Editora = insEdit;
+        this.Preço = new Dinheiro(insPreço);
+        this.Quantidade = insQtnd;
+        this.ISBN = new CodigoISBN(insCodigo);
+    }
+
     public String getTitulo() {
         return Titulo;
     }

@@ -1,6 +1,5 @@
 package projeto;
 
-import projeto.System.Models.valores.Permissoes;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

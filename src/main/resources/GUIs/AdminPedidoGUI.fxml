@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projeto.AdminCTRL">
+   <center>
+      <VBox prefHeight="400.0" prefWidth="640.0">
+         <children>
+            <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="359.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <SplitPane dividerPositions="0.6604010025062657" layoutX="301.0" layoutY="4.0" prefHeight="396.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0">
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="378.0" prefWidth="478.0">
+                           <children>
+                              <ScrollPane prefHeight="554.0" prefWidth="599.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <VBox fx:id="pedidoList" prefHeight="553.0" prefWidth="796.0">
+                                       <padding>
+                                          <Insets bottom="20.0" />
+                                       </padding></VBox>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="350.0" prefWidth="154.0">
+                           <children>
+                              <Pane prefHeight="554.0" prefWidth="193.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Button fx:id="novoPedido" layoutX="76.0" layoutY="219.0" mnemonicParsing="false" onAction="#pedidoNovo" text="Novo Pedido" />
+                                    <Label fx:id="qtndPedido" layoutX="54.0" layoutY="130.0" prefHeight="20.0" prefWidth="110.0" text="Pedidos:" />
+                                    <Label fx:id="pedidoPIX" layoutX="54.0" layoutY="150.0" prefHeight="20.0" prefWidth="110.0" text="Pedidos com PIX:" />
+                                    <Label fx:id="pedidoDinher" layoutX="54.0" layoutY="170.0" prefHeight="20.0" prefWidth="130.0" text="Pedidos com dinheiro:" />
+                                    <Label fx:id="pedidoCartao" layoutX="54.0" layoutY="190.0" prefHeight="20.0" prefWidth="130.0" text="Pedidos com cartão:" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <buttons>
+            <Button fx:id="usersPage" mnemonicParsing="false" onAction="#usersTela" text="Usuarios" />
+            <Button fx:id="livrosPage" mnemonicParsing="false" onAction="#livrosTela" text="Livros" />
+            <Button fx:id="pedidosPage" mnemonicParsing="false" onAction="#pedidosTela" text="Recarregar" />
+            <Button fx:id="voltar" mnemonicParsing="false" onAction="#initADMtela" text="Voltar" />
+         </buttons>
+      </ButtonBar>
+   </top>
+</BorderPane>

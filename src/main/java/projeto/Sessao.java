@@ -11,7 +11,12 @@ public class Sessao {
     private static DAO loggadoDAO;
 
     public static void setLoggado(User insUsr){
-        loggado = insUsr;
+        loggado = new User(
+            insUsr.getNome(),
+            insUsr.getEmail(),
+            insUsr.getID().toString(),
+            insUsr.getFunção()
+        );
     }
 
     public static DAO getDAO(){
