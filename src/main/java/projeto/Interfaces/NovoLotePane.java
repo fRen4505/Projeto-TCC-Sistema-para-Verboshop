@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import javax.swing.JOptionPane;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -23,12 +22,7 @@ public class NovoLotePane extends Dialog<ArrayList<Livro>>{
     @FXML
     private VBox loteLivs;
 
-    private Alert alert = new Alert(Alert.AlertType.ERROR);
-
     public NovoLotePane(List<Livro> insLibs){
-
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
 
         HashMap<String, Integer> insLote = new HashMap<>();
 
@@ -37,8 +31,8 @@ public class NovoLotePane extends Dialog<ArrayList<Livro>>{
             loader.setController(this);
             DialogPane tela = loader.load();
 
-            this.setTitle("Novo lote");
-            this.setDialogPane(tela);
+            setTitle("Novo lote");
+            setDialogPane(tela);
 
             for (Livro livro : insLibs) {
 
@@ -57,7 +51,7 @@ public class NovoLotePane extends Dialog<ArrayList<Livro>>{
                 
                 String val = livro.getISBN().valorISBN();
 
-                add.setOnAction((adicio) ->{
+                add.setOnAction((_) ->{
                     if (insLote.containsKey(val)) {
                         insLote.put(val, insLote.get(val) + 1);
                         qtnd.setText( (Integer.parseInt(qtnd.getText()) + 1) + "" );
@@ -67,11 +61,10 @@ public class NovoLotePane extends Dialog<ArrayList<Livro>>{
                     }
                 });
 
-                sub.setOnAction((subtra) ->{
+                sub.setOnAction((_) ->{
                     if (Integer.parseInt(qtnd.getText()) > 0) {
                         
                         qtnd.setText(String.valueOf( (Integer.parseInt(qtnd.getText()) - 1) ));
-                
                         insLote.put(val, Integer.parseInt(qtnd.getText()));
 
                         if (Integer.parseInt(qtnd.getText()) == 0) {
@@ -81,47 +74,53 @@ public class NovoLotePane extends Dialog<ArrayList<Livro>>{
                 });
 
                 loteLivs.getChildren().add(info);
-            
             }
 
             ButtonType confirm = new ButtonType("Cadastrar", ButtonData.OK_DONE);
             ButtonType cancelar = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
             tela.getButtonTypes().addAll(confirm, cancelar);
 
-            this.setResultConverter(dialogButton ->{
-                try {
-                    if(dialogButton == confirm){
+            setResultConverter(dialogButton ->{
+                if(dialogButton == confirm){
 
-                        ArrayList<Livro> lote = new ArrayList<Livro>();
+                    ArrayList<Livro> lote = new ArrayList<Livro>();
 
+                    for (Livro livro : insLibs) {
                         insLote.forEach( (isbn, qntd) -> {
-                            for (Livro livro : insLibs) {
-                                if(livro.getISBN().valorISBN().equals(isbn)){
-                                    lote.add(new Livro(
-                                        livro.getTitulo(), 
-                                        livro.getAutor(), 
-                                        livro.getEditora(), 
-                                        livro.getPreço().doubleValue(), 
-                                        (livro.getQuantidade() + qntd), 
-                                        livro.getISBN().valorISBN()
-                                    ));
-                                }
+                            
+                            if(livro.getISBN().valorISBN().equals(isbn)){
+                                lote.add(new Livro(
+                                    livro.getTitulo(), 
+                                    livro.getAutor(), 
+                                    livro.getEditora(), 
+                                    livro.getPreço().getQuantiaDouble(), 
+                                    (livro.getQuantidade() + qntd), 
+                                    livro.getISBN().valorISBN()
+                                ));
                             }
                         });
-                        return lote;
                     }
-                } catch (NullPointerException e1) {
-                    alert.setContentText("Erro de referência nula: " + e1.getMessage());
-                    alert.showAndWait();
+                    return lote;
+                }else{
                     return null;
-                }
-                return null;
+                }        
             });
 
+        }catch (NullPointerException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro, dados vazios e não cadastrados, cancelado \n motivo "+e1.getMessage(),
+                "erro", 
+                0
+            );      
 
         } catch (IOException e2) {
-            alert.setContentText("Erro ao carregar layout FXML: " + e2.getMessage());
-            alert.showAndWait();        
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro, por input incorreta \n motivo, cancelado"+e2.getMessage(),
+                "erro", 
+                0
+            );            
         }
 
     }

@@ -13,27 +13,27 @@ public class Pedido {
     private LocalDateTime DataCriação;
     private List<Livro> Encomendas;
     private UUID IDPedido;
+    private Integer Entregue;
 
-    public Pedido(User insCriador, User insCLient, Pagamentos insPaga, List<Livro> insEcomendas){
-        this.Criador = insCriador;
-        this.Cliente = insCLient;
-        this.pagamento = insPaga;
-        this.DataCriação = LocalDateTime.now();
-        this.Encomendas = insEcomendas;
-        this.IDPedido = UUID.randomUUID();
+    public Pedido(User insCriador, User insCLient, Pagamentos insPaga, List<Livro> insEncomendas){
+        try {
+            if (insCriador != null && insCLient!= null && insPaga!= null && insEncomendas!= null) {
+                this.Criador = insCriador;
+                this.Cliente = insCLient;
+                this.pagamento = insPaga;
+                this.DataCriação = LocalDateTime.now();
+                this.Encomendas = insEncomendas;
+                this.IDPedido = UUID.randomUUID();
+            }
+        }catch (NullPointerException e) {
+            throw new NullPointerException("Falta ou inexistencia de dados para pedido \n" + e.getMessage());
+        }
     }
 
-    public Pedido(User insCriador, User insCLient, Pagamentos insPaga, List<Livro> insEcomendas, String insID){
-        this.Criador = insCriador;
-        this.Cliente = insCLient;
-        this.pagamento = insPaga;
-        this.DataCriação = LocalDateTime.now();
-        this.Encomendas = insEcomendas;
+    public Pedido(User insCriador, User insCLient, Pagamentos insPaga, List<Livro> insEcomendas, String insID, Integer insEntregue){
+        this(insCriador, insCLient, insPaga, insEcomendas);
         this.IDPedido = UUID.fromString(insID);
-    }
-
-    public void addEncomendas(Livro insLivro) {
-        Encomendas.add(insLivro);
+        this.Entregue = insEntregue;
     }
 
     public List<Livro> getEncomendas() {
@@ -51,6 +51,10 @@ public class Pedido {
 
     public UUID getIDpedido(){
         return IDPedido;
+    }
+
+    public Integer getEntregue(){
+        return Entregue;
     }
 
     public LocalDateTime getDataCriação() {

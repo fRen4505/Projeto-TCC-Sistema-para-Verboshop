@@ -3,6 +3,8 @@ package projeto.Interfaces;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import javax.swing.JOptionPane;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import projeto.Sessao;
 import projeto.System.AdminDAO;
-import projeto.System.DAO;
-import projeto.System.UserDAO;
+import projeto.System.PerfilDAO;
 import projeto.System.Models.Livro;
-import projeto.System.Models.Pedido;
 import projeto.System.Models.valores.Permissoes;
 
 public class LivroPane {
@@ -38,78 +38,91 @@ public class LivroPane {
     @FXML
     private Label livQtnd = new Label("Quantidade: ");
 
-    private DAO dao;
-    private Livro insLiv;
+    private PerfilDAO dao = Sessao.getDAO();
+    private Livro insLivro;
 
     public LivroPane(){}
 
     public Pane painel(Livro insLiv){
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/LivroPane.fxml"));
+            loader.setController(this);
             Pane tela = loader.load();
 
-            LivroPane controller = loader.getController();
-
-            if (Sessao.getUser().getFunção() == Permissoes.ADMINISTRADOR) {
-                controller.dao = (AdminDAO) Sessao.getDAO();
-            }else{
-                controller.dao = (UserDAO) Sessao.getDAO();
-                controller.alterar.setVisible(false);
-                controller.deletar.setVisible(false);
+            if (Sessao.getUser().getFunção() != Permissoes.ADMINISTRADOR) {
+                alterar.setVisible(false);
+                deletar.setVisible(false);
             }
             
-            controller.livTitulo.setText(livTitulo.getText() + insLiv.getTitulo());
-            controller.livAutor.setText(livAutor.getText() + insLiv.getAutor());
-            controller.livEditor.setText(livEditor.getText() + insLiv.getEditora());
-            controller.livISBN.setText(livISBN.getText() + insLiv.getISBN().valorISBN());
-            controller.livPreco.setText(livPreco.getText() + insLiv.getPreço().toString());
+            livTitulo.setText(livTitulo.getText() + insLiv.getTitulo());
+            livAutor.setText(livAutor.getText() + insLiv.getAutor());
+            livEditor.setText(livEditor.getText() + insLiv.getEditora());
+            livISBN.setText(livISBN.getText() + insLiv.getISBN().valorISBN());
+            livPreco.setText(livPreco.getText() + insLiv.getPreço().valor());
             if (insLiv.getQuantidade() > 0) {
-                controller.livQtnd.setText(livQtnd.getText() + insLiv.getQuantidade().toString());
+                livQtnd.setText(livQtnd.getText() + insLiv.getQuantidade().toString());
             } else {
-                controller.livQtnd.setText(livQtnd.getText() + insLiv.getQuantidade().toString());
-                //controller.livQtnd.setText(livQtnd.getText() + "Não há no estoque");
+                livQtnd.setText(livQtnd.getText() + "Não há no estoque");
                 tela.setStyle("-fx-background-color: #ff0000");
             }
 
-            controller.insLiv = insLiv;
+            insLivro = insLiv;
             
             return tela;
 
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();        
+        } catch (Exception e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro ao acessar dados \n motivo "+e1.getMessage(),
+                "erro", 
+                0
+            );
+            return this.livPane;
         }
-
-        return this.livPane;
     }
 
     public void livroDelete(ActionEvent e){
         try {
-            if (Sessao.getUser().getFunção() == Permissoes.ADMINISTRADOR) {
+            String[] vals = {"sim", "não"};
+            String opt = (String)JOptionPane.showInputDialog(null, 
+                "Deseja mesmo excluir?",
+                "Deletar", 
+                2, 
+                null, 
+                vals,vals[1]
+            );
+
+            if (Sessao.getUser().getFunção() == Permissoes.ADMINISTRADOR && opt == "sim") {
                 AdminDAO daoAlt = ((AdminDAO) this.dao);
                 
-                daoAlt.deletarLivro(insLiv.getISBN());
+                daoAlt.deletarLivro(insLivro.getISBN());
             }
         } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por utilização, exclusão cancelada \n motivo: "+e1.getMessage() ,
+                "Erro", 
+                0
+            );   
         }
     }
 
     public void livroAlterar(ActionEvent e){
         try {
             if (Sessao.getUser().getFunção() == Permissoes.ADMINISTRADOR) {
-                AdminDAO daoAlt = ((AdminDAO) this.dao);
 
-                AlterarLivro dialog = new AlterarLivro(this.insLiv);
-                Optional<Livro> resultado = dialog.showAndWait();
+                Optional<Livro> resultado = new AlterarLivro(this.insLivro).showAndWait();
 
-                daoAlt.alterarLivro(this.insLiv.getISBN(), resultado.get());
+                this.dao.alterarLivro(this.insLivro.getISBN(), resultado.get());
             }
             
-        } catch (Exception e1) {
-            // TODO: handle exception
+        } catch (SQLException e2) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por falta de dados, alteração cancelada \n motivo: "+e2.getMessage() ,
+                "Erro", 
+                0
+            );         
         }
 
     }

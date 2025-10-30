@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane prefHeight="150.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projeto.Interfaces.LivroPane">
+<Pane prefHeight="150.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="livTitulo" prefHeight="37.0" prefWidth="300.0" style="-fx-padding:10;" text="Titulo:" />
       <Button fx:id="deletar" layoutX="450.0" layoutY="90.0" mnemonicParsing="false" onAction="#livroDelete" prefHeight="40.0" prefWidth="65.0" text="Deletar" />

@@ -1,6 +1,5 @@
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\AdminCTRL.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\AlterarLivro.java
-C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\AlterarPedido.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\AlterarUser.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\CadastrarLivro.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\Interfaces\CadastroPedido.java
@@ -22,6 +21,7 @@ C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\C
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\DAO.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Database\DataBase.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Database\SQLreader.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\EntregaPedido.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\InitDAO.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\Livro.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\Pedido.java
@@ -31,5 +31,6 @@ C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\M
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Email.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Pagamentos.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Permissoes.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\PerfilDAO.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\UserDAO.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\UserCTRL.java

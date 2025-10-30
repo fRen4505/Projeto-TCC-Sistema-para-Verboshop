@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projeto.Interfaces.UserPane">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="alterar" layoutX="250.0" layoutY="65.0" mnemonicParsing="false" onAction="#userAlterar" prefHeight="40.0" prefWidth="65.0" text="Alterar" />
       <Button fx:id="deletar" layoutX="350.0" layoutY="65.0" mnemonicParsing="false" onAction="#userDelete" prefHeight="40.0" prefWidth="65.0" text="Deletar" />

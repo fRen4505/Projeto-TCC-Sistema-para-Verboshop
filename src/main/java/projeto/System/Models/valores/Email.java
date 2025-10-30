@@ -10,28 +10,12 @@ public class Email {
         return email;
     }
     
-    public void setEmail(String insMail){
-        
-        try {
-            EmailValidator.getInstance().isValid(insMail);
-            this.email = insMail;
-            
-        } catch (Exception e) {
-            System.out.println("email invalido");
-            e.printStackTrace(); 
-        }
-
-    }
-
     public Email(String insMail){
-
-        try {
-            EmailValidator.getInstance().isValid(insMail);
+        if (EmailValidator.getInstance().isValid(insMail)) {
             this.email = insMail;
-            
-        } catch (Exception e) {
-            System.out.println("email invalido");
-            e.printStackTrace(); 
+        } else {
+            this.email = null;
+            throw new IllegalArgumentException("Email inserido invalido");
         }
 
     }

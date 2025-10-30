@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,158 +25,154 @@ public class Login {
     private Stage stage;
     private static InitDAO verificação = InitDAO.getInstancia(); 
 
-    //private User usuarioAtual;
-
     private List<User> usuarios;
 
     @FXML
-    private TextField insNome;
-    @FXML
-    private TextField insMail;
+    private TextField insNome, insMail;
     @FXML
     private Button logButton, telaLogin;
     @FXML
-    private ToggleGroup funcao;
+    private ToggleGroup funcao = new ToggleGroup();
     @FXML
-    private RadioButton adminButton, userButton;
-    
-    //public User getUsuarioAtual() {
-    //    return usuarioAtual;
-    //}
+    private RadioButton adminButton = new RadioButton("Administrador"); 
+    @FXML
+    private RadioButton userButton = new RadioButton("Usuario");
+        
+    public Login(Stage inStage){
 
-    public Login(){}
-
-    public Stage tela(Stage inStage){
-                
         try {
             this.stage = inStage;
             this.usuarios = verificação.getUsers();
+
+            if (this.usuarios.isEmpty()) {
+                this.telaCadastro();
+            } else {
+                this.telaLogin();
+            }
             
-            if (this.usuarios.isEmpty() == true) {
-                this.stage.setTitle("Cadastro Inicial");
-                Parent tela = FXMLLoader.load(getClass().getResource("/GUIs/PrimeiroCadastroGUI.fxml"));
-                Scene cena = new Scene(tela);
-                this.stage.setScene(cena);
-
-            }else{
-                this.stage.setTitle("Login");
-                Parent tela = FXMLLoader.load(getClass().getResource("/GUIs/LoginGUI.fxml"));
-                Scene cena = new Scene(tela);
-                this.stage.setScene(cena);
-            }
-        
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return this.stage;
-    }
-
-    public void logging(ActionEvent e) throws IOException{
-
-        try {
-            usuarios = verificação.getUsers();
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-
-        String logName = insNome.getText();
-        String logMail = insMail.getText();
-        String logFuncao = funcao.getSelectedToggle().toString();
-
-        Parent root;
-        FXMLLoader loader;
-
-        if (logButton.isArmed()) {
-        
-            for (User usr : this.usuarios) {
-
-                if (usr.getNome().equals(logName) && usr.getEmail().equals(logMail) ) {
-    
-                    if (adminButton.isSelected() && usr.getFunção() == Permissoes.ADMINISTRADOR ) {
-    
-                        Sessao.setLoggado(usr);
-        
-                        loader = new FXMLLoader(getClass().getResource("/GUIs/AdminGUI.fxml"));
-                        root = loader.load();
-                        
-                        AdminCTRL adminLog = loader.getController();
-                        Stage currStage = (Stage)((Node)e.getSource()).getScene().getWindow();
-                        
-                        adminLog.tela(Sessao.getUser(), currStage);
-    
-                        Scene cena = new Scene(root);
-                        currStage.setScene(cena);
-                        currStage.show();
-    
-                        this.telaClose();
-                        break;
-                    }
-                    if (userButton.isSelected() && usr.getFunção() == Permissoes.USUARIO ) {
-    
-                        Sessao.setLoggado(usr);
-                            
-                        loader = new FXMLLoader(getClass().getResource("/GUIs/UserGUI.fxml"));
-                        root = loader.load();
-                        
-                        UserCTRL userLog = loader.getController();
-                        Stage currStage = (Stage)((Node)e.getSource()).getScene().getWindow();
-
-                        userLog.tela(Sessao.getUser(), currStage);
-    
-                        Scene cena = new Scene(root);
-                        currStage.setScene(cena);
-                        currStage.show();
-    
-                        this.telaClose();
-                        break;
-                    }
-    
-                }else{
-                    System.out.println("false");
-                    System.out.println(logFuncao);
-                }
-    
-            }
-    
+        }catch (SQLException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha ao iniciar e recolher os dados \nMotivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            ); 
         }
     }
-
-    public void CadastradoInicial(ActionEvent e){
-
-        System.out.println(">>Cadastro de primeiro usuario<<");
-
-        String username = insNome.getText();
-        String email = insMail.getText();
-       
-        User primeiroADM = new User(username, email, null);
-
+    
+    public void telaLogin(){
         try {
-            verificação.adicionarUser(primeiroADM);
-            System.out.println("usuario novo: " + primeiroADM.getNome());
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-        
+            adminButton.setToggleGroup(funcao);
+            userButton.setToggleGroup(funcao);
 
-    }
+            this.stage.setTitle("Login de perfil");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/LoginGUI.fxml"));
+            loader.setController(this);
+            Parent tela = loader.load();
 
-    public void mudarTela(ActionEvent e){
-        try {
-            Parent tela = FXMLLoader.load(getClass().getResource("/GUIs/LoginGUI.fxml"));
             Scene cena = new Scene(tela);
-            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
             this.stage.setScene(cena);
             this.stage.show();
 
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (IOException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro ao exibir tela \nMotivo "+ e1.getMessage(),
+                "Erro", 
+                0
+            ); 
+        }
+    }
+
+    public void telaCadastro(){
+        try {
+            this.stage.setTitle("Cadastro Inicial");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/PrimeiroCadastroGUI.fxml"));
+            loader.setController(this);
+            Parent tela = loader.load();
+
+            Scene cena = new Scene(tela);
+            this.stage.setScene(cena);
+            this.stage.show();
+
+        } catch (IOException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro ao carregar tela \nMotivo " + e1.getMessage(),
+                "Erro", 
+                0
+            ); 
+        }
+    }
+
+    public void CadastroInicial(ActionEvent e){
+
+        try {
+            verificação.adicionarUser(
+                new User(
+                    insNome.getText(), 
+                    insMail.getText(), 
+                    null
+                )
+            );
+
+            new Login(this.stage).telaLogin();
+
+        } catch (SQLException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro ao acessar dados \nMotivo " +e1.getMessage(),
+                "Erro", 
+                0
+            ); 
+        }catch (NullPointerException e2) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por falta de dados, cadastro cancelado",
+                "Erro", 
+                0
+            ); 
+        }
+        
+    }
+
+    public void logging(ActionEvent e){
+
+        try {
+            RadioButton logFuncao = (RadioButton) funcao.getSelectedToggle();
+    
+            User temp = new User(
+                insNome.getText(), 
+                insMail.getText(), 
+                Permissoes.valueOf(logFuncao.getText().toUpperCase())
+            );
+    
+            this.usuarios.forEach(usr -> {
+    
+                if (temp.getNome().equals(usr.getNome()) 
+                    && temp.getEmail().equals(usr.getEmail()) 
+                    && temp.getFunção().getPermissaoNome().equals(usr.getFunção().name())
+                ) {       
+                    Sessao.setLoggado(usr);
+    
+                    new Main().entrar(stage);
+                }
+                
+            });
+    
+        }catch (NullPointerException e2) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por falta de dados, login cancelado",
+                "Erro", 
+                0
+            ); 
         }
     }
 
     public void telaClose(){
         usuarios.clear();
-        //this.stage = null;
-        //this.stage.close();
+        this.stage.close();
     }
+
 }

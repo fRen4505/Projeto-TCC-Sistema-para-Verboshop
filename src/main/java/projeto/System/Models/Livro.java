@@ -1,7 +1,5 @@
 package projeto.System.Models;
 
-import java.math.BigDecimal;
-
 import projeto.System.Models.valores.CodigoISBN;
 import projeto.System.Models.valores.Dinheiro;
 
@@ -15,28 +13,41 @@ public class Livro {
     private Integer Quantidade = 0;
 
     public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, String insCodigo) {
-        this.Titulo = insTitulo;
-        this.Autor = insAutor;
-        this.Editora = insEdit;
-        this.Preço = new Dinheiro(insPreço);
-        this.ISBN = new CodigoISBN(insCodigo);
+        try {
+            if (insTitulo != "" && insAutor != "" && insEdit != "" && insCodigo != "") {
+                this.Titulo = insTitulo;
+                this.Autor = insAutor;
+                this.Editora = insEdit;
+                this.Preço = new Dinheiro(insPreço);
+                this.ISBN = new CodigoISBN(insCodigo);
+            }
+        }catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Dados inseridos para livro são invalidos \n" + e.getMessage());
+        }catch (NullPointerException e) {
+            throw new NullPointerException("Falta de dados para livro \n" + e.getMessage());
+        }
     }
 
     public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, Integer insQtnd) {
-        this.Titulo = insTitulo;
-        this.Autor = insAutor;
-        this.Editora = insEdit;
-        this.Preço = new Dinheiro(insPreço);
-        this.Quantidade = insQtnd;
+        try {
+            if (insTitulo != "" && insAutor != "" &&  insEdit!= "") {
+                this.Titulo = insTitulo;
+                this.Autor = insAutor;
+                this.Editora = insEdit;
+                this.Preço = new Dinheiro(insPreço);
+                this.Quantidade = insQtnd;
+            } 
+        }catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Dados inseridos para livro são invalidos \n" + e.getMessage());
+        }catch (NullPointerException e) {
+            throw new NullPointerException("Falta de dados para livro \n" + e.getMessage());
+        }
+               
     }
 
     public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, Integer insQtnd, String insCodigo) {
-        this.Titulo = insTitulo;
-        this.Autor = insAutor;
-        this.Editora = insEdit;
-        this.Preço = new Dinheiro(insPreço);
+        this(insTitulo, insAutor, insEdit, insPreço, insCodigo);
         this.Quantidade = insQtnd;
-        this.ISBN = new CodigoISBN(insCodigo);
     }
 
     public String getTitulo() {
@@ -55,8 +66,8 @@ public class Livro {
         return ISBN;
     }
 
-    public BigDecimal getPreço() {
-        return Preço.getQuantia();
+    public Dinheiro getPreço() {
+        return Preço;
     }
     public void setPreço(double preço) {
         Preço.novaQuantia(preço);

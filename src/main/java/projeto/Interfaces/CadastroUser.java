@@ -1,10 +1,13 @@
 package projeto.Interfaces;
 
+import java.io.IOException;
+
+import javax.swing.JOptionPane;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
@@ -19,59 +22,62 @@ public class CadastroUser extends Dialog<User>{
     @FXML
     private RadioButton insAdmin, insUser, insClient;
 
-    private Alert alert = new Alert(Alert.AlertType.ERROR);
-
     public CadastroUser(){
-
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserCadastroPane.fxml"));
             loader.setController(this);
             DialogPane tela = loader.load();
 
-            this.setTitle("Cadastro de novo Usuario");
-            this.setDialogPane(tela);
+            setTitle("Cadastro de novo Usuario");
+            setDialogPane(tela);
 
             ButtonType confirm = new ButtonType("Cadastrar", ButtonData.OK_DONE);
             ButtonType cancelar = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
             tela.getButtonTypes().addAll(confirm, cancelar);
 
-            this.setResultConverter(dialogButton -> {
-                try {
-                    if(dialogButton == confirm) {
-                        if (insAdmin.isSelected()) {
-                            return new User(
-                                insNome.getText(),
-                                insMail.getText(), 
-                                Permissoes.ADMINISTRADOR
-                            );
-                        }if (insUser.isSelected()) {
-                            return new User(
-                                insNome.getText(),
-                                insMail.getText(), 
-                                Permissoes.USUARIO
-                            );                       
-                        }if (insClient.isSelected()) {
-                            return new User(
-                                insNome.getText(),
-                                insMail.getText(), 
-                                Permissoes.CLIENTE
-                            );
-                        }
+            setResultConverter(dialogButton -> {
+                if(dialogButton == confirm) {
+                    if (insAdmin.isSelected()) {
+                        return new User(
+                            insNome.getText(),
+                            insMail.getText(), 
+                            Permissoes.ADMINISTRADOR
+                        );
+                    }if (insUser.isSelected()) {
+                        return new User(
+                            insNome.getText(),
+                            insMail.getText(), 
+                            Permissoes.USUARIO
+                        );                       
+                    }if (insClient.isSelected()) {
+                        return new User(
+                            insNome.getText(),
+                            insMail.getText(), 
+                            Permissoes.CLIENTE
+                        );
+                    }else{
+                        return null;
                     }
-                } catch (Exception e) {
-                    alert.setContentText("Erro por falta de dados, cadastro cancelado");
-                    alert.showAndWait();
+                }else{
                     return null;
                 }
-                return null;
             });
             
-        } catch (Exception e2) {
-            alert.setContentText( e2.getMessage() + ", cadastro cancelado");
-            alert.showAndWait();        
+        }catch (IOException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por "+e1.getMessage() + ", cadastro cancelado",
+                "Erro", 
+                0
+            );       
+        }catch(NullPointerException e2){
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por valor errado ou vazio, cadastro cancelado \n motivo: "+e2.getMessage(),
+                "Erro", 
+                0
+            );  
         }
 
     }

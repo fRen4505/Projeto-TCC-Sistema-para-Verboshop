@@ -1,7 +1,11 @@
 package projeto.Interfaces;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
+
+import javax.swing.JOptionPane;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,60 +43,97 @@ public class UserPane {
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserPane.fxml"));
+            loader.setController(this);
             Pane tela = loader.load();
 
-            UserPane controller = loader.getController();
-
             if (insUsr.getFunção() == Permissoes.CLIENTE) {
-                controller.alterar.setVisible(false);
+                alterar.setVisible(false);
             }
 
-            controller.usrNom.setText(usrNom.getText() + insUsr.getNome());
-            controller.usrMail.setText(usrMail.getText() + insUsr.getEmail());
-            controller.usrFunc.setText(usrFunc.getText() + insUsr.getFunção().getPermissaoNome());
-            controller.usrID.setText(usrID.getText() + insUsr.getID().toString());
+            usrNom.setText(usrNom.getText() + insUsr.getNome());
+            usrMail.setText(usrMail.getText() + insUsr.getEmail());
+            usrFunc.setText(usrFunc.getText() + insUsr.getFunção().getPermissaoNome());
+            usrID.setText(usrID.getText() + insUsr.getID().toString());
 
-            controller.usr = insUsr;
-            controller.dao = (AdminDAO) Sessao.getDAO();
+            usr = insUsr;
+            dao = (AdminDAO) Sessao.getDAO();
             
             return tela;
 
-        } catch (Exception e) {
-            e.printStackTrace();    
-            // TODO Auto-generated catch block
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro ao acessar dados \n motivo "+e.getMessage(),
+                "erro", 
+                0
+            );
+            return this.usrPane;
         }
-
-        return this.usrPane;
     }
 
     
     public void userDelete(ActionEvent e){
         try {
-            if(  this.usr.getID().compareTo(Sessao.getUser().getID()) != 0  ) {
-                this.dao.deletarUser(this.usr.getID());
+            if (this.usr.getID().compareTo(Sessao.getUser().getID()) != 0 ) {
+                String[] vals = {"sim", "não"};
+                String opt = (String)JOptionPane.showInputDialog(null, 
+                    "Deseja mesmo excluir?",
+                    "Deletar", 
+                    2, 
+                    null, 
+                    vals,vals[1]
+                );
+                if( opt == "sim") {
+                    this.dao.deletarUser(this.usr.getID());
+                }
             }else{
-                // TODO Auto-generated catch block
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Não é permitido um usuario excluir o proprio cadastro desta forma",
+                    "Erro", 
+                    2
+                );
             }
+
         } catch (SQLException e1) {
-            e1.printStackTrace();
-            // TODO Auto-generated catch block
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por utilização em pedido, exclusão cancelada \n motivo: "+e1.getMessage() ,
+                "Erro", 
+                0
+            );
         }
     }
 
     public void userAlterar(ActionEvent e){
         try {
-            AlterarUser dialog = new AlterarUser(this.usr);
-            Optional<User> alterado = dialog.showAndWait();
+            if( this.usr.getID().compareTo(Sessao.getUser().getID()) != 0 ) {
+                AlterarUser dialog = new AlterarUser(this.usr);
+                Optional<User> alterado = dialog.showAndWait();
 
-            try {
                 this.dao.alterarUser(this.usr.getID(), alterado.get());
-            } catch (Exception e2) {
-                // TODO: handle exception
-                e2.printStackTrace();
+            }else{
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Não é permitido um usuario excluir o proprio cadastro desta forma",
+                    "Erro", 
+                    2
+                );
             }
-        } catch (Exception e3) {
-            e3.printStackTrace();
-            // TODO: handle exception
+        } catch (SQLException e2) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por falta de dados, alteração cancelada \n motivo: "+e2.getMessage() ,
+                "Erro", 
+                0
+            ); 
+        }catch (NullPointerException e3) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por falta de dados, alteração cancelada \n motivo: "+e3.getMessage() ,
+                "Erro", 
+                0
+            ); 
         }
     }
 

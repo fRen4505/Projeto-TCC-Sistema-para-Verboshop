@@ -19,9 +19,10 @@ public class User {
                 this.Função = insPermissão;
                 this.ID = UUID.randomUUID();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            // TODO: handle exception
+        }catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Dados inseridos para usuario são invalidos \n" + e.getMessage());
+        }catch (NullPointerException e) {
+            throw new NullPointerException("Falta de dados para usuario \n" + e.getMessage());
         }
     }
 
@@ -33,24 +34,24 @@ public class User {
                 this.Função = insPermissão;
                 this.ID = UUID.fromString(insID);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            // TODO: handle exception
+        }catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Dados inseridos para usuario são invalidos \n" + e.getMessage());
+        }catch (NullPointerException e) {
+            throw new NullPointerException("Falta de dados para usuario \n" + e.getMessage());
         }
     }
 
     public String getNome() {
         return Nome;
     }
-    public void setNome(String nome) {
-        this.Nome = nome;
+
+    @Override
+    public String toString(){
+        return " " + Nome + " ";
     }
 
     public String getEmail() {
         return Email.getEmail();
-    }
-    public void setEmail(String email) {
-        this.Email.setEmail(email);
     }
 
     public Permissoes getFunção() {

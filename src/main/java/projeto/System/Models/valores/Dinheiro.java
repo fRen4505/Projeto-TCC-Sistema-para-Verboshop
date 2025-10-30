@@ -8,14 +8,13 @@ public class Dinheiro {
     private Currency real = Currency.getInstance("BRL");
     private BigDecimal quantia;
 
-    //public Dinheiro(BigDecimal insQuantia){
-    //    this.quantia = insQuantia.setScale(real.getDefaultFractionDigits());
-    //}
-
     public Dinheiro(double insQuantia){
         if (insQuantia > 0) {
             BigDecimal tempVal = new BigDecimal(insQuantia);
             this.quantia = tempVal.setScale(real.getDefaultFractionDigits());
+        }else {
+            this.quantia = null;
+            throw new IllegalArgumentException("Quantia inserida é invalida");
         }
     }
 
@@ -23,7 +22,14 @@ public class Dinheiro {
         if (insQuantia >= 0) {
             BigDecimal tempVal = new BigDecimal(insQuantia);
             this.quantia = tempVal.setScale(real.getDefaultFractionDigits());
+        }else {
+            this.quantia = null;
+            throw new IllegalArgumentException("Quantia inserida é invalida");
         }
+    }
+
+    public String valor(){
+        return real.getSymbol() + " " + quantia.toString();
     }
     
     public BigDecimal getQuantia() {
@@ -34,8 +40,5 @@ public class Dinheiro {
         return quantia.doubleValue();
     }
 
-    public String toString(){
-        return real.getSymbol() + " " + quantia;
-    }
 
 }

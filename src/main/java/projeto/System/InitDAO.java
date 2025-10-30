@@ -15,13 +15,11 @@ public class InitDAO extends DAO implements UserInterface {
 
     private static InitDAO Instancia;
 
-    private InitDAO(User insCurrent, Permissoes permissaoDAO) {
-        super(insCurrent, permissaoDAO);
-    }
+    private InitDAO() {}
 
     public static InitDAO getInstancia(){
         if (Instancia == null) {
-            Instancia = new InitDAO(new User("ini", "ini", Permissoes.INIT), Permissoes.INIT);
+            Instancia = new InitDAO();
             return Instancia;
         } else {
             return Instancia;

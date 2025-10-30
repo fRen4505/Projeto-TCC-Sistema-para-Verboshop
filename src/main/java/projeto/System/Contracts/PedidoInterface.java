@@ -9,8 +9,10 @@ public interface PedidoInterface {
     
     public void criarPedido(Pedido insPedido) throws SQLException;
 
-    public void alterarPedido(UUID insPedidoID, Pedido insPedidoAlt) throws SQLException;
+    public void deletarPedido(UUID insPedidoID) throws SQLException;
 
     public List<Pedido> getPedidos() throws SQLException; 
+
+    public void entreguePedido(UUID insPedidoID) throws SQLException;
 
 }

@@ -2,10 +2,9 @@ package projeto.Interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.swing.JOptionPane;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -32,12 +31,7 @@ public class CadastroPedido extends Dialog<Pedido>{
     @FXML
     private ComboBox<User> clientes = new ComboBox<>();
     
-    private Alert alert = new Alert(Alert.AlertType.ERROR);
-
     public CadastroPedido(List<Livro> insLibs, List<User> insClients){
-
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
 
         ArrayList<Livro> encomendas = new ArrayList<>();
 
@@ -46,8 +40,8 @@ public class CadastroPedido extends Dialog<Pedido>{
             loader.setController(this);
             DialogPane tela = loader.load();
 
-            this.setTitle("Cadastro de novo Pedido");
-            this.setDialogPane(tela);
+            setTitle("Cadastro de novo Pedido");
+            setDialogPane(tela);
 
             for (Livro liv : insLibs) {
                 if (liv.getQuantidade() > 0) {
@@ -65,14 +59,16 @@ public class CadastroPedido extends Dialog<Pedido>{
                     livItem.setSpacing(15.5);
                     livItem.getChildren().addAll(nome , buttons);
                     
-                    add.setOnAction((adicio) ->{
-                        encomendas.add(liv);
+                    add.setOnAction((_) ->{
+                        if (Integer.parseInt(qtnd.getText()) < liv.getQuantidade()) {
+                            encomendas.add(liv);
 
-                        qtnd.setText( (Integer.parseInt(qtnd.getText()) + 1) + "");
+                            qtnd.setText( (Integer.parseInt(qtnd.getText()) + 1) + "");
+                        }
                     });
 
-                    sub.setOnAction((subtra) ->{
-                        if ( Integer.parseInt(qtnd.getText()) > 0) {
+                    sub.setOnAction((_) ->{
+                        if (Integer.parseInt(qtnd.getText()) > 0) {
                             encomendas.remove(liv);
 
                             qtnd.setText( (Integer.parseInt(qtnd.getText()) - 1) + "");
@@ -89,62 +85,52 @@ public class CadastroPedido extends Dialog<Pedido>{
                     
                     clientes.getItems().add(client);
 
-                    clientes.setCellFactory(lv -> new ListCell<>() {
+                    clientes.setCellFactory(_ -> new ListCell<>() {
                         @Override
                         protected void updateItem(User client, boolean empty) {
                             super.updateItem(client, empty);
-                            setText(empty || client.getNome() == null ? null : client.getNome());
+                            setText(empty || client.getNome().toString() == null ? null : client.getNome().toString());
                         }
                     });
 
                 }
             }
 
-            metodos.setCellFactory(pg -> new ListCell<>() {
+            metodos.getItems().addAll(Pagamentos.values());
+
+            metodos.setCellFactory(_ -> new ListCell<>() {
                 @Override
                 protected void updateItem(Pagamentos metodo, boolean empty) {
                     super.updateItem(metodo, empty);
-                    if (empty || metodo == null) {
-                        setText(null);
-                    } else {
-                        switch (metodo) {
-                            case CREDITO -> setText("Cartão de Credito");
-                            case DEBITO -> setText("Cartão de Debito");
-                            case DINHEIRO -> setText("Dinheiro");
-                            case PIX -> setText("PIX");
-                        }
-                    }
+                    setText(empty || metodo.name().toString() == null ? null : metodo.name().toString());
+
                 }
             });
-
-            metodos.getItems().addAll(Pagamentos.CREDITO, Pagamentos.DEBITO, Pagamentos.DINHEIRO, Pagamentos.PIX);
             
             ButtonType confirm = new ButtonType("Cadastrar", ButtonData.OK_DONE);
             ButtonType cancelar = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
             tela.getButtonTypes().addAll(confirm, cancelar);
 
-            this.setResultConverter(dialogButton ->{
-                try {
-                    if(dialogButton == confirm){
-                        return new Pedido(
-                            Sessao.getUser(), 
-                            clientes.getValue(), 
-                            metodos.getValue(),
-                            encomendas
-                        );
-                    }
-
-                } catch (Exception e1) {
-                    alert.setContentText("Erro por falta de dados, cadastro cancelado");
-                    alert.showAndWait();
+            setResultConverter(dialogButton ->{
+                if(dialogButton == confirm){
+                    return new Pedido(
+                        Sessao.getUser(), 
+                        clientes.getValue(), 
+                        metodos.getValue(),
+                        encomendas
+                    );
+                }else{
                     return null;
                 }
-                return null;
             });
 
         } catch (Exception e2) {
-            alert.setContentText( e2.getMessage() + ", cadastro cancelado");
-            alert.showAndWait();        
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por "+e2.getMessage() + ", cadastro cancelado",
+                "Erro", 
+                0
+            );          
         }
 
     }

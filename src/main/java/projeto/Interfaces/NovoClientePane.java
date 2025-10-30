@@ -1,9 +1,12 @@
 package projeto.Interfaces;
 
+import java.io.IOException;
+
+import javax.swing.JOptionPane;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
@@ -18,45 +21,47 @@ public class NovoClientePane extends Dialog<User>{
     @FXML
     private TextField insNome;
 
-    private Alert alert = new Alert(Alert.AlertType.ERROR);
-
     public NovoClientePane(){
-
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/ClienteCadastroPane.fxml"));
             loader.setController(this);
             DialogPane tela = loader.load();
 
-            this.setTitle("Cadastro de novo cliente");
-            this.setDialogPane(tela);
+            setTitle("Cadastro de novo cliente");
+            setDialogPane(tela);
 
             ButtonType confirm = new ButtonType("Cadastrar", ButtonData.OK_DONE);
             ButtonType cancelar = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
             tela.getButtonTypes().addAll(confirm, cancelar);
 
             this.setResultConverter(dialogButton -> {
-                try {
-                    if(dialogButton == confirm) {
-                        return new User(
-                            insNome.getText(),
-                            insMail.getText(), 
-                            null
-                        );
-                    }
-                } catch (Exception e) {
-                    alert.setContentText("Erro por falta de dados, cadastro cancelado");
-                    alert.showAndWait();
+                if(dialogButton == confirm) {
+                    return new User(
+                        insNome.getText(),
+                        insMail.getText(), 
+                        null
+                    );  
+                }else{
                     return null;
                 }
-                return null;
             });
-            
-        } catch (Exception e2) {
-            alert.setContentText( e2.getMessage() + ", cadastro cancelado");
-            alert.showAndWait();        
+
+        }catch (NullPointerException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro, dados vazios e não cadastrados, cancelado \n motivo "+e1.getMessage(),
+                "erro", 
+                0
+            );      
+
+        } catch (IOException e2) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por input incorreta, cancelado \n motivo "+e2.getMessage(),
+                "erro", 
+                0
+            );            
         }
 
     }

@@ -1,9 +1,11 @@
 package projeto.Interfaces;
 
 import javafx.scene.control.Dialog;
+
+import javax.swing.JOptionPane;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.RadioButton;
@@ -19,20 +21,15 @@ public class AlterarUser extends Dialog<User>{
     @FXML
     private RadioButton altUser, altAdmin;
 
-    private Alert alert = new Alert(Alert.AlertType.ERROR);
-
     public AlterarUser(User usr){
-
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserAlteracaoPane.fxml"));
             loader.setController(this);
             DialogPane tela = loader.load();
 
-            this.setTitle("Alteração de cadastro de Usuario");
-            this.setDialogPane(tela);
+            setTitle("Alteração de cadastro de Usuario");
+            setDialogPane(tela);
 
             altNome.setText(usr.getNome());
             altMail.setText(usr.getEmail());
@@ -53,33 +50,34 @@ public class AlterarUser extends Dialog<User>{
             tela.getButtonTypes().addAll(confirm, cancelar);
 
             this.setResultConverter(dialogButton -> {
-                try {
-                    if(dialogButton == confirm) {
-                        if (altAdmin.isSelected()) {
-                            return new User(
-                                altNome.getText(),
-                                altMail.getText(), 
-                                Permissoes.ADMINISTRADOR
-                            );
-                        }if (altUser.isSelected()) {
-                            return new User(
-                                altNome.getText(),
-                                altMail.getText(), 
-                                Permissoes.USUARIO
-                            );                       
-                        }
+                if(dialogButton == confirm) {
+                    if (altAdmin.isSelected()) {
+                        return new User(
+                            altNome.getText(),
+                            altMail.getText(), 
+                            Permissoes.ADMINISTRADOR
+                        );
+                    }if (altUser.isSelected()) {
+                        return new User(
+                            altNome.getText(),
+                            altMail.getText(), 
+                            Permissoes.USUARIO
+                        );                       
+                    }else{
+                        return null;
                     }
-                } catch (Exception e) {
-                    alert.setContentText("Erro por falta de dados, cadastro cancelado");
-                    alert.showAndWait();
+                }else{
                     return null;
                 }
-                return null;
             });
 
-        } catch (Exception e2) {
-            alert.setContentText( e2.getMessage() + ", cadastro cancelado");
-            alert.showAndWait();
+        } catch (Exception e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro por "+e1.getMessage() + ", alteração cancelada",
+                "Erro", 
+                0
+            );    
         }
 
     }

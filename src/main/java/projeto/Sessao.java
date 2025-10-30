@@ -1,14 +1,14 @@
 package projeto;
 
 import projeto.System.AdminDAO;
-import projeto.System.DAO;
+import projeto.System.PerfilDAO;
 import projeto.System.UserDAO;
 import projeto.System.Models.User;
 
 public class Sessao {
     
     private static User loggado;
-    private static DAO loggadoDAO;
+    private static PerfilDAO loggadoDAO;
 
     public static void setLoggado(User insUsr){
         loggado = new User(
@@ -19,7 +19,7 @@ public class Sessao {
         );
     }
 
-    public static DAO getDAO(){
+    public static PerfilDAO getDAO(){
 
         switch (loggado.getFunção()) {
             case ADMINISTRADOR:
@@ -41,6 +41,7 @@ public class Sessao {
     }
 
     public static void deLog(){
+        loggadoDAO.closeConneccao();
         loggado = null;
     }
 

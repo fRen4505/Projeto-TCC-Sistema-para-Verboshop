@@ -1,8 +1,10 @@
 package projeto.Interfaces;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Optional;
-
+import javax.swing.JOptionPane;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,11 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import projeto.Sessao;
-import projeto.System.AdminDAO;
-import projeto.System.DAO;
-import projeto.System.UserDAO;
+import projeto.System.EntregaPedido;
+import projeto.System.PerfilDAO;
 import projeto.System.Models.Livro;
 import projeto.System.Models.Pedido;
+import projeto.System.Models.valores.Dinheiro;
 import projeto.System.Models.valores.Permissoes;
 
 public class PedidoPane {
@@ -24,7 +26,7 @@ public class PedidoPane {
     private Pane pedPane;
 
     @FXML
-    private Button alterar, entregue;
+    private Button entregue = new Button("Entregar"), cancelar;
     
     @FXML
     private Label client = new Label("Cliente: ");
@@ -36,9 +38,12 @@ public class PedidoPane {
     private Label data = new Label("Data: ");
     @FXML
     private Label pagaMeto = new Label("Pagamento: ");
+    @FXML
+    private Label totalVal = new Label("Total: ");
 
-    private DAO dao;
+    private PerfilDAO dao = Sessao.getDAO();
     private Pedido insPedido;
+    EntregaPedido entrega;
     
     @FXML
     private ListView<String> encoList = new ListView<>();
@@ -50,77 +55,141 @@ public class PedidoPane {
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/PedidoPane.fxml"));
+            loader.setController(this);
             Pane tela = loader.load();
 
-            PedidoPane control = loader.getController();
+            if (Sessao.getUser().getFunção() != Permissoes.ADMINISTRADOR) {
+                creator.setVisible(false);
+            }
+            if (insPed.getEntregue() == 1) {
+                entrega = new EntregaPedido(insPed.getDataCriação(), insPedido);
+                entrega.iniciar();
 
-            if (Sessao.getUser().getFunção() == Permissoes.ADMINISTRADOR) {
-                control.dao = (AdminDAO) Sessao.getDAO();
-            }else{
-                control.dao = (UserDAO) Sessao.getDAO();
-                control.creator.setVisible(false);
+                entregue.setText("Entregue");
+                entregue.setDisable(true);
+                entregue.setStyle("-fx-background-color: #0fa600");
             }
 
-            control.client.setText(client.getText() + insPed.getCliente().getNome());
-            control.idPedi.setText(idPedi.getText() + insPed.getIDpedido().toString());
-            control.creator.setText(creator.getText() + insPed.getCriador().getNome());
-            control.data.setText(data.getText() + insPed.getDataCriação());
-            control.pagaMeto.setText(pagaMeto.getText() + insPed.getPagamento().name());
+            LocalDateTime dataCriacao = insPed.getDataCriação();
 
+            client.setText(client.getText() + insPed.getCliente().getNome());
+            idPedi.setText(idPedi.getText() + insPed.getIDpedido().toString());
+            creator.setText(creator.getText() + insPed.getCriador().getNome());
+            data.setText(data.getText() + 
+                dataCriacao.getDayOfMonth() 
+                + "/" + dataCriacao.getMonthValue() 
+                + "/" + dataCriacao.getYear()
+            );
+            pagaMeto.setText(pagaMeto.getText() + insPed.getPagamento().name());
+
+            Double precoGeral = 0.0;
             for (int l = 0; l < insPed.getEncomendas().size(); l++) {
 
                 Livro liv = insPed.getEncomendas().get(l);
                 
-                if (control.encoVals.containsKey(liv.getTitulo())) {
-                    control.encoVals.put(
+                precoGeral += liv.getPreço().getQuantiaDouble();
+
+                if (encoVals.containsKey(liv.getTitulo())) {
+                    encoVals.put(
                         liv.getTitulo(), 
-                        (control.encoVals.get( liv.getTitulo() ) + 1)
+                        (encoVals.get( liv.getTitulo() ) + 1)
                     );
                 }else{
-                    control.encoVals.putIfAbsent(liv.getTitulo(), 1);
+                    encoVals.putIfAbsent(liv.getTitulo(), 1);
                 }
             }
+            totalVal.setText(totalVal.getText() + new Dinheiro(precoGeral).valor());
 
-            control.encoVals.forEach((liv, quan) -> {
-                control.encoList.getItems().add( "Livros: " + liv + "\tQuantidades: " + quan );
+            encoVals.forEach((liv, quan) -> {
+                encoList.getItems().add( "Livros: " + liv + "\tQuantidades: " + quan );
             });   
-              
-            control.insPedido = insPed;
+            
+            insPedido = insPed;
 
             return tela;
 
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+        }catch (IOException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro ao acessar dados \n motivo "+e1.getMessage(),
+                "erro", 
+                0
+            );  
+            return this.pedPane;       
         }
-
-        return this.pedPane;
-
     }
     
     public void pedidoEntregue(ActionEvent e){
 
-    }
-
-    public void pedidoAlterar(ActionEvent e){
         try {
-            if (Sessao.getUser().getFunção() == Permissoes.ADMINISTRADOR) {
-                AdminDAO daoAlt = ((AdminDAO) this.dao);
-                AlterarPedido dialog = new AlterarPedido(insPedido, daoAlt.getLivros(), daoAlt.getUsers());
-                Optional<Pedido> resultado = dialog.showAndWait();
+            String[] vals = {"sim", "não"};
+            String opt = (String)JOptionPane.showInputDialog(null, 
+                "Deseja mesmo confirmar a entrega?",
+                "Entregar", 
+                2, 
+                null, 
+                vals,vals[1]
+            );
+            if(opt == "sim") {
+                entrega = new EntregaPedido(insPedido.getDataCriação(), insPedido);
+                entrega.iniciar();
 
-                daoAlt.alterarPedido(this.insPedido.getIDpedido(), resultado.get());
-            }else{
-                UserDAO dao = ((UserDAO) this.dao);
-                AlterarPedido dialog = new AlterarPedido(insPedido, dao.getLivros(), dao.getUsers());
-                Optional<Pedido> resultado = dialog.showAndWait();
+                dao.entreguePedido(insPedido.getIDpedido());
 
-                dao.alterarPedido(this.insPedido.getIDpedido(), resultado.get());
+                entregue.setText("Entregue");
+                entregue.setDisable(true);
+                entregue.setStyle("-fx-background-color: #0fa600");
             }
-
         } catch (Exception e1) {
-            // TODO: handle exception
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro ao confirmar entrega, cancelado \nMotivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            );
         }
+        
+
     }
 
-}
+    public void pedidoCancelar(ActionEvent e){
+
+        try {
+            String[] vals = {"sim", "não"};
+            String opt = (String)JOptionPane.showInputDialog(null, 
+                "Deseja mesmo cancelar o pedido?",
+                "Cancelar", 
+                2, 
+                null, 
+                vals,vals[1]
+            );
+            if(opt.equals("sim")) {
+                for (Livro val : this.dao.getLivros()) {
+
+                    insPedido.getEncomendas().forEach((liv) -> {
+                        if (val.getISBN().valorISBN().equals(liv.getISBN().valorISBN())) {
+                            val.aumentarQuantidade(1);
+                        }
+                    });
+                    this.dao.alterarLivro(val.getISBN(), val);               
+                }
+                if (this.entrega != null) {
+                    if (insPedido.getEntregue() == 1) {
+                        entrega.parar();
+                    }
+                }
+                this.dao.deletarPedido(insPedido.getIDpedido());    
+            }
+            
+        } catch (SQLException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Erro, exclusão cancelada \n motivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            );}
+        }    
+        
+    }
+ 
+

@@ -6,18 +6,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-
+import javax.swing.JOptionPane;
 import projeto.Interfaces.CadastrarLivro;
 import projeto.Interfaces.CadastroPedido;
 import projeto.Interfaces.CadastroUser;
@@ -69,19 +68,14 @@ public class AdminCTRL {
     @FXML
     private Label qtndPedido = new Label("Pedidos: ");
 
-    
     private User loggedUser;
     private AdminDAO dao;
-
-    private Alert alert = new Alert(Alert.AlertType.ERROR);
                 
     private List<User> usuarios;
     private List<Livro> livros;
     private List<Pedido> pedidos;
     
-    public AdminCTRL(){}
-
-    public void tela(User usrIns, Stage insTela){
+    public AdminCTRL(User usrIns, Stage insTela){
 
         if (usrIns == null) {
             usrIns = Sessao.getUser();
@@ -97,13 +91,14 @@ public class AdminCTRL {
                 this.userName.setText(this.userName.getText() + loggedUser.getNome());
                 this.stage.setTitle("Gerenciamento");
          
-            } catch (Exception e) {
-                e.printStackTrace();
-                // TODO Auto-generated catch block
+            }catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Falha ao iniciar tela \nMotivo: "+e.getMessage(),
+                    "Erro", 
+                    0
+                ); 
             }
-
-        }if (insTela == null) {
-            System.out.println("tela é nula");
         }else{
             this.stage.close();
         }
@@ -113,32 +108,33 @@ public class AdminCTRL {
     //===============================METODOS PARA GUI===============================
 
     public void initADMtela(ActionEvent e){
+        
         try {
+            this.loggedUser = Sessao.getUser();
+            this.dao = (AdminDAO) Sessao.getDAO();
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminGUI.fxml"));
+            loader.setController(this);
             Parent tela = loader.load();                
                 
-            AdminCTRL control = loader.getController();
-
             Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
-
-            control.tela(Sessao.getUser(), currStage);
-            this.dao = (AdminDAO) Sessao.getDAO();
 
             Scene cena = new Scene(tela);
             currStage.setScene(cena);
             currStage.show();
 
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            // TODO Auto-generated catch block
+        }catch (IOException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha ao iniciar tela \nMotivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            ); 
         }
     }
 
     public void sairTela(){
         Sessao.deLog();
-        //usuarios.clear();
-        //livros.clear();
-        //pedidos.clear();
         this.loggedUser = null;
         this.stage.close();
     }
@@ -149,20 +145,16 @@ public class AdminCTRL {
         try {
             
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminUserGUI.fxml"));
+            loader.setController(this);
             Parent tela = loader.load();
-            AdminCTRL ctrl = loader.getController();
-            this.stage.setTitle("Gerenciamento de usuarios");
 
-            Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
-            
-            ctrl.tela(Sessao.getUser(), currStage);
-            this.dao = (AdminDAO) Sessao.getDAO();
+            this.stage.setTitle("Gerenciamento de usuarios");
 
             int adms = 0;
             int usrs = 0;
             int cliens = 0;
 
-            usuarios = ctrl.dao.getUsers();
+            usuarios = Sessao.getDAO().getUsers();
             for (User usr : usuarios) {
                 if (usr.getFunção() == Permissoes.ADMINISTRADOR) {
                     adms++;
@@ -172,40 +164,60 @@ public class AdminCTRL {
                     cliens++;
                 }
 
-                UserPane pane = new UserPane();
-                Pane usrPane = pane.painel(usr);
+                Pane usrPane = new UserPane().painel(usr);
 
-                ctrl.users.getChildren().add(usrPane);
+                users.getChildren().add(usrPane);
             }
 
-            ctrl.total.setText(ctrl.total.getText() + usuarios.size());
-            ctrl.admins.setText(ctrl.admins.getText() + adms);
-            ctrl.usurs.setText(ctrl.usurs.getText() + usrs);
-            ctrl.clientes.setText(ctrl.clientes.getText() + cliens);
+            total.setText(total.getText() + usuarios.size());
+            admins.setText(admins.getText() + adms);
+            usurs.setText(usurs.getText() + usrs);
+            clientes.setText(clientes.getText() + cliens);
 
             Scene cena = new Scene(tela);
-            ctrl.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
-            ctrl.stage.setScene(cena);
-            ctrl.stage.show();
+            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
+            this.stage.setScene(cena);
+            this.stage.show();
 
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            // TODO Auto-generated catch block
+        }catch (SQLException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha ao adquirir dados \nMotivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            ); 
+        }catch (IOException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha ao iniciar tela \nMotivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            ); 
         }
     }
 
-
     public void userNovo(ActionEvent e){
 
-        CadastroUser dialog = new CadastroUser();
-        Optional<User> cadastrado = dialog.showAndWait();
+        Optional<User> cadastrado = new CadastroUser().showAndWait();
         
         cadastrado.ifPresent(novo -> {
             try {
-                this.dao.adicionarUser(novo);
+                Sessao.getDAO().adicionarUser(novo);
+                this.usersTela(e);
             } catch (SQLException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Falha a cadastrar usuario \nMotivo: "+e1.getMessage(),
+                    "Erro", 
+                    0
+                ); 
+            }catch (NullPointerException e1) {
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Falha a cadastrar usuario por falta de dados",
+                    "Erro", 
+                    0
+                ); 
             }
         });
             
@@ -217,57 +229,74 @@ public class AdminCTRL {
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminLivroGUI.fxml"));
+            loader.setController(this);
             Parent tela = loader.load();
-            AdminCTRL ctrl = loader.getController();
-            this.stage.setTitle("Gerenciamento de livros");
 
-            Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
-            
-            ctrl.tela(Sessao.getUser(), currStage);
-            this.dao = (AdminDAO) Sessao.getDAO();
+            this.stage.setTitle("Gerenciamento de livros");
 
             int val = 0;
             int total = 0;
 
-            livros = ctrl.dao.getLivros();
+            livros = Sessao.getDAO().getLivros();
             for (Livro liv : livros) {
                 if(liv.getQuantidade() == 0){
                     val = val + 1;
                 }
                 total = total + liv.getQuantidade(); 
 
-                LivroPane pane = new LivroPane();
-                Pane libPane = pane.painel(liv);
+                Pane libPane = new LivroPane().painel(liv);
 
-                ctrl.livList.getChildren().add(libPane);
+                livList.getChildren().add(libPane);
             }
 
-            ctrl.totalLivros.setText(ctrl.totalLivros.getText() + total);
-            ctrl.livroQtnd.setText(ctrl.livroQtnd.getText() + livros.size());
-            ctrl.livrosNone.setText(ctrl.livrosNone.getText() + val);
+            totalLivros.setText(totalLivros.getText() + total);
+            livroQtnd.setText(livroQtnd.getText() + livros.size());
+            livrosNone.setText(livrosNone.getText() + val);
 
             Scene cena = new Scene(tela);
-            ctrl.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
-            ctrl.stage.setScene(cena);
-            ctrl.stage.show();
+            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
+            this.stage.setScene(cena);
+            this.stage.show();
 
-        } catch (Exception e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        }catch (SQLException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha ao adquirir dados \nMotivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            ); 
+        }catch (IOException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha ao iniciar tela \nMotivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            ); 
         }
     }
 
     public void livroNovo(ActionEvent e){
 
-        CadastrarLivro dialog = new CadastrarLivro();
-        Optional<Livro> cadastro = dialog.showAndWait();
+        Optional<Livro> cadastro = new CadastrarLivro().showAndWait();
 
         cadastro.ifPresent(novo -> {
             try {
                 this.dao.adicionarLivro(novo);
+                this.livrosTela(e);
             } catch (SQLException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Falha a cadastrar livro \nMotivo: "+e1.getMessage(),
+                    "Erro", 
+                    0
+                ); 
+            }catch (NullPointerException e1) {
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Falha a cadastrar livro por falta de dados",
+                    "Erro", 
+                    0
+                ); 
             }
         });
         
@@ -279,23 +308,18 @@ public class AdminCTRL {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminPedidoGUI.fxml"));
+            loader.setController(this);
             Parent tela = loader.load();
-            AdminCTRL ctrl = loader.getController();
 
             this.stage.setTitle("Gerenciamento de pedidos");
-
-            Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
-            
-            ctrl.tela(Sessao.getUser(), currStage);
-            this.dao = (AdminDAO) Sessao.getDAO();
 
             int pix = 0;
             int cartao = 0;
             int dinheiro = 0;
 
-            ctrl.pedidoList.setSpacing(27.5);
+            pedidoList.setSpacing(27.5);
 
-            pedidos = ctrl.dao.getPedidos();
+            pedidos = Sessao.getDAO().getPedidos();
             for (Pedido ped : pedidos) {
                 if (ped.getPagamento() == Pagamentos.DINHEIRO) {
                     dinheiro = dinheiro + 1;
@@ -306,24 +330,35 @@ public class AdminCTRL {
                 if (ped.getPagamento() == Pagamentos.CREDITO || ped.getPagamento() == Pagamentos.DEBITO) {
                     cartao = cartao + 1;
                 }
-                PedidoPane pediInfo = new PedidoPane();
-                Pane pedidoPane = pediInfo.painel(ped);
 
-                ctrl.pedidoList.getChildren().add(pedidoPane);
+                Pane pedidoPane = new PedidoPane().painel(ped);
+
+                pedidoList.getChildren().add(pedidoPane);
             }
-            ctrl.qtndPedido.setText(ctrl.qtndPedido.getText()+pedidos.size());
-            ctrl.pedidoDinher.setText(ctrl.pedidoDinher.getText()+dinheiro);
-            ctrl.pedidoPIX.setText(ctrl.pedidoPIX.getText() + pix);
-            ctrl.pedidoCartao.setText(ctrl.pedidoCartao.getText() + cartao);
+            qtndPedido.setText(qtndPedido.getText()+pedidos.size());
+            pedidoDinher.setText(pedidoDinher.getText()+dinheiro);
+            pedidoPIX.setText(pedidoPIX.getText() + pix);
+            pedidoCartao.setText(pedidoCartao.getText() + cartao);
 
             Scene cena = new Scene(tela);
-            ctrl.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
-            ctrl.stage.setScene(cena);
-            ctrl.stage.show();
+            this.stage = (Stage)((Node)e.getSource()).getScene().getWindow(); 
+            this.stage.setScene(cena);
+            this.stage.show();
 
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            // TODO: handle exception
+        }catch (SQLException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha ao adquirir dados \nMotivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            ); 
+        }catch (IOException e1) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha ao iniciar tela \nMotivo: "+e1.getMessage(),
+                "Erro", 
+                0
+            ); 
         }
 
     }
@@ -332,22 +367,31 @@ public class AdminCTRL {
         
         try {
             Optional<Pedido> cadastro = new CadastroPedido(
-                this.dao.getLivros(),
-                this.dao.getUsers()
+                Sessao.getDAO().getLivros(),
+                Sessao.getDAO().getUsers()
             ).showAndWait();
             
             cadastro.ifPresent(novo ->{
                 try {
-                    this.dao.criarPedido(novo);
+                    Sessao.getDAO().criarPedido(novo);
+                    this.pedidosTela(e);
                 } catch (SQLException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Falha a cadastrar pedido \nMotivo: "+e1.getMessage(),
+                        "Erro", 
+                        0
+                    ); 
                 }
             });
        
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SQLException | NullPointerException e2) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha a iniciar cadastro de pedido \nMotivo: "+e2.getMessage(),
+                "Erro", 
+                0
+            ); 
         }
 
     }
