@@ -73,69 +73,76 @@ public class UserPane {
 
     
     public void userDelete(ActionEvent e){
-        try {
-            if (this.usr.getID().compareTo(Sessao.getUser().getID()) != 0 ) {
-                String[] vals = {"sim", "não"};
-                String opt = (String)JOptionPane.showInputDialog(null, 
-                    "Deseja mesmo excluir?",
-                    "Deletar", 
-                    2, 
-                    null, 
-                    vals,vals[1]
-                );
-                if( opt == "sim") {
+        if (this.usr.getID().compareTo(Sessao.getUser().getID()) != 0 ) {
+            String[] vals = {"sim", "não"};
+            String opt = (String)JOptionPane.showInputDialog(null, 
+                "Deseja mesmo excluir?",
+                "Deletar", 
+                2, 
+                null, 
+                vals,vals[1]
+            );
+            if( opt == "sim") {
+                try {
                     this.dao.deletarUser(this.usr.getID());
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Erro por utilização em pedido, exclusão cancelada \n motivo: "+e1.getMessage() ,
+                        "Erro", 
+                        0
+                    );
                 }
-            }else{
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "Não é permitido um usuario excluir o proprio cadastro desta forma",
-                    "Erro", 
-                    2
-                );
             }
-
-        } catch (SQLException e1) {
+        }else{
             JOptionPane.showMessageDialog(
                 null, 
-                "Erro por utilização em pedido, exclusão cancelada \n motivo: "+e1.getMessage() ,
+                "Não é permitido um usuario excluir o proprio cadastro desta forma",
                 "Erro", 
-                0
+                2
             );
         }
+        
     }
 
     public void userAlterar(ActionEvent e){
-        try {
-            if( this.usr.getID().compareTo(Sessao.getUser().getID()) != 0 ) {
-                AlterarUser dialog = new AlterarUser(this.usr);
-                Optional<User> alterado = dialog.showAndWait();
+        if( this.usr.getID().compareTo(Sessao.getUser().getID()) != 0 ) {
 
-                this.dao.alterarUser(this.usr.getID(), alterado.get());
-            }else{
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "Não é permitido um usuario excluir o proprio cadastro desta forma",
-                    "Erro", 
-                    2
-                );
-            }
-        } catch (SQLException e2) {
+            AlterarUser dialog = new AlterarUser(this.usr);
+            Optional<User> alterado = dialog.showAndWait();
+
+            alterado.ifPresent(alter ->{
+                try {
+                    this.dao.alterarUser(this.usr.getID(), alterado.get());
+
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Erro por falta de dados, alteração cancelada \n motivo: "+e2.getMessage() ,
+                        "Erro", 
+                        0
+                    ); 
+                }catch (NullPointerException e3) {
+                    e3.printStackTrace();
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Erro por falta de dados, alteração cancelada \n motivo: "+e3.getMessage() ,
+                        "Erro", 
+                        0
+                    ); 
+                }
+            });
+
+        }else{
             JOptionPane.showMessageDialog(
                 null, 
-                "Erro por falta de dados, alteração cancelada \n motivo: "+e2.getMessage() ,
+                "Não é permitido um usuario alterar o proprio cadastro desta forma",
                 "Erro", 
-                0
-            ); 
-        }catch (NullPointerException e3) {
-            JOptionPane.showMessageDialog(
-                null, 
-                "Erro por falta de dados, alteração cancelada \n motivo: "+e3.getMessage() ,
-                "Erro", 
-                0
-            ); 
+                2
+            );
         }
+        
     }
-
 
 }

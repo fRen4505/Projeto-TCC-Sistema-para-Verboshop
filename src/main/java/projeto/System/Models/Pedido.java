@@ -11,17 +11,19 @@ public class Pedido {
     private User Cliente; 
     private Pagamentos pagamento;
     private LocalDateTime DataCriação;
+    private LocalDateTime DataEntrega;
     private List<Livro> Encomendas;
     private UUID IDPedido;
     private Integer Entregue;
 
     public Pedido(User insCriador, User insCLient, Pagamentos insPaga, List<Livro> insEncomendas){
         try {
-            if (insCriador != null && insCLient!= null && insPaga!= null && insEncomendas!= null) {
+            if (insCriador != null && insCLient!= null && insPaga!= null && insEncomendas != null) {
                 this.Criador = insCriador;
                 this.Cliente = insCLient;
                 this.pagamento = insPaga;
                 this.DataCriação = LocalDateTime.now();
+                this.DataEntrega = DataCriação.plusDays(29); 
                 this.Encomendas = insEncomendas;
                 this.IDPedido = UUID.randomUUID();
             }
@@ -30,14 +32,20 @@ public class Pedido {
         }
     }
 
-    public Pedido(User insCriador, User insCLient, Pagamentos insPaga, List<Livro> insEcomendas, String insID, Integer insEntregue){
+    public Pedido(User insCriador, User insCLient, Pagamentos insPaga, List<Livro> insEcomendas, String insID, Integer insEntregue, String insData, String insDataEntrega){
         this(insCriador, insCLient, insPaga, insEcomendas);
         this.IDPedido = UUID.fromString(insID);
         this.Entregue = insEntregue;
+        this.DataCriação = LocalDateTime.parse(insData);
+        this.DataEntrega = LocalDateTime.parse(insDataEntrega);
     }
 
     public List<Livro> getEncomendas() {
-        return Encomendas;
+        if (Encomendas != null) {
+            return Encomendas;
+        } else {
+            throw new NullPointerException("Falta ou inexistencia de dados para pedido \n");
+        }
     }
 
     public Livro getLivroEncomendado(String ISBNins){
@@ -59,6 +67,10 @@ public class Pedido {
 
     public LocalDateTime getDataCriação() {
         return DataCriação;
+    }
+
+    public LocalDateTime getDataEntrega(){
+        return DataEntrega;
     }
 
     public User getCliente() {

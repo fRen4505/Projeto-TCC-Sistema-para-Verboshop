@@ -30,7 +30,7 @@
                   <ToggleGroup fx:id="funcao" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="userButton" layoutX="272.0" layoutY="185.0" mnemonicParsing="false" onAction="#logging" text="Usuário" toggleGroup="$funcao" />
+            <RadioButton fx:id="userButton" layoutX="272.0" layoutY="185.0" mnemonicParsing="false" onAction="#logging" text="Usuario" toggleGroup="$funcao" />
             <Label layoutX="230.0" layoutY="150.0" text="Função" />
             <TextField id="insMail" fx:id="insMail" layoutX="176.0" layoutY="105.0" prefHeight="25.0" prefWidth="150.0" />
             <Label layoutX="205.0" layoutY="85.0" text="Email de Usuário" />

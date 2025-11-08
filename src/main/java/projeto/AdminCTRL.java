@@ -119,6 +119,9 @@ public class AdminCTRL {
                 
             Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
 
+            this.userName.setText(this.userName.getText() + loggedUser.getNome());
+            this.stage.setTitle("Gerenciamento");
+
             Scene cena = new Scene(tela);
             currStage.setScene(cena);
             currStage.show();
@@ -297,6 +300,13 @@ public class AdminCTRL {
                     "Erro", 
                     0
                 ); 
+            }catch (IllegalArgumentException e1) {
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Falha a cadastrar livro por dados errados \nMotivo: "+e1.getMessage(),
+                    "Erro", 
+                    0
+                ); 
             }
         });
         
@@ -317,24 +327,26 @@ public class AdminCTRL {
             int cartao = 0;
             int dinheiro = 0;
 
-            pedidoList.setSpacing(27.5);
+            //pedidoList.setSpacing(27.5);
 
             pedidos = Sessao.getDAO().getPedidos();
             for (Pedido ped : pedidos) {
-                if (ped.getPagamento() == Pagamentos.DINHEIRO) {
-                    dinheiro = dinheiro + 1;
+                if (ped.getEntregue() == 1) {
+                    Sessao.getDAO().entreguePedido(ped.getIDpedido());
+                }else{
+                    if (ped.getPagamento() == Pagamentos.DINHEIRO) {
+                        dinheiro = dinheiro + 1;
+                    }
+                    if (ped.getPagamento() == Pagamentos.PIX) {
+                        pix = pix + 1;
+                    }
+                    if (ped.getPagamento() == Pagamentos.CREDITO || ped.getPagamento() == Pagamentos.DEBITO) {
+                        cartao = cartao + 1;
+                    }
+                    pedidoList.getChildren().add( new PedidoPane().painel(ped) );
                 }
-                if (ped.getPagamento() == Pagamentos.PIX) {
-                    pix = pix + 1;
-                }
-                if (ped.getPagamento() == Pagamentos.CREDITO || ped.getPagamento() == Pagamentos.DEBITO) {
-                    cartao = cartao + 1;
-                }
-
-                Pane pedidoPane = new PedidoPane().painel(ped);
-
-                pedidoList.getChildren().add(pedidoPane);
             }
+            
             qtndPedido.setText(qtndPedido.getText()+pedidos.size());
             pedidoDinher.setText(pedidoDinher.getText()+dinheiro);
             pedidoPIX.setText(pedidoPIX.getText() + pix);
@@ -385,10 +397,17 @@ public class AdminCTRL {
                 }
             });
        
-        } catch (SQLException | NullPointerException e2) {
+        } catch (SQLException e2) {
             JOptionPane.showMessageDialog(
                 null, 
-                "Falha a iniciar cadastro de pedido \nMotivo: "+e2.getMessage(),
+                "Falha a iniciar cadastro de pedido por problema no banco \nMotivo: "+e2.getMessage(),
+                "Erro", 
+                0
+            ); 
+        }catch (NullPointerException e2) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha a iniciar cadastro de pedido por problema nos dados \nMotivo: "+e2.getMessage(),
                 "Erro", 
                 0
             ); 

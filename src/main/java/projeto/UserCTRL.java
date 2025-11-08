@@ -35,7 +35,7 @@ import projeto.System.Models.valores.Permissoes;
 
 public class UserCTRL {
     
-    private Stage stage = new Stage();
+    private Stage stage;
 
     @FXML
     private Button livrosPage, pedidosPage, voltar, sair, novoPedido, novoCliente, novoLote;
@@ -292,7 +292,7 @@ public class UserCTRL {
             
             cadastro.ifPresent(novo ->{
                 try {
-                    this.dao.criarPedido(novo);
+                    Sessao.getDAO().criarPedido(novo);
                     this.pedidosTela(e);
                 } catch (SQLException e1) {
                     JOptionPane.showMessageDialog(
@@ -308,6 +308,13 @@ public class UserCTRL {
             JOptionPane.showMessageDialog(
                 null, 
                 "Falha a iniciar cadastro de pedido \nMotivo: "+e2.getMessage(),
+                "Erro", 
+                0
+            ); 
+        }catch (NullPointerException e2) {
+            JOptionPane.showMessageDialog(
+                null, 
+                "Falha a iniciar cadastro de pedido por problema nos dados \nMotivo: "+e2.getMessage(),
                 "Erro", 
                 0
             ); 

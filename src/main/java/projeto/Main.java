@@ -4,14 +4,20 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Main extends Application{
     
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     @Override
     public void start(Stage stage) {
@@ -78,6 +84,27 @@ public class Main extends Application{
             
                 break;
         }
+
+        stage.setOnCloseRequest( new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent arg0) {
+                String[] vals = {"sim", "não"};
+                String opt = (String)JOptionPane.showInputDialog(null, 
+                    "Deseja mesmo sair?",
+                    "Sair", 
+                    2, 
+                    null, 
+                    vals,vals[1]
+                );
+                if (opt.equals("sim")) {
+                    log.error("Sistema fechando");
+                }else{
+                    
+                }
+            }
+            
+        });
         
     }
 

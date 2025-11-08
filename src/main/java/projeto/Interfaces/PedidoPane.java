@@ -13,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import projeto.Sessao;
-import projeto.System.EntregaPedido;
 import projeto.System.PerfilDAO;
 import projeto.System.Models.Livro;
 import projeto.System.Models.Pedido;
@@ -43,7 +42,6 @@ public class PedidoPane {
 
     private PerfilDAO dao = Sessao.getDAO();
     private Pedido insPedido;
-    EntregaPedido entrega;
     
     @FXML
     private ListView<String> encoList = new ListView<>();
@@ -53,7 +51,6 @@ public class PedidoPane {
 
     public Pane painel(Pedido insPed){
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/PedidoPane.fxml"));
             loader.setController(this);
             Pane tela = loader.load();
@@ -62,9 +59,6 @@ public class PedidoPane {
                 creator.setVisible(false);
             }
             if (insPed.getEntregue() == 1) {
-                entrega = new EntregaPedido(insPed.getDataCriação(), insPedido);
-                entrega.iniciar();
-
                 entregue.setText("Entregue");
                 entregue.setDisable(true);
                 entregue.setStyle("-fx-background-color: #0fa600");
@@ -98,7 +92,7 @@ public class PedidoPane {
                     encoVals.putIfAbsent(liv.getTitulo(), 1);
                 }
             }
-            totalVal.setText(totalVal.getText() + new Dinheiro(precoGeral).valor());
+            totalVal.setText(totalVal.getText() + new Dinheiro( precoGeral).valor());
 
             encoVals.forEach((liv, quan) -> {
                 encoList.getItems().add( "Livros: " + liv + "\tQuantidades: " + quan );
@@ -131,16 +125,13 @@ public class PedidoPane {
                 vals,vals[1]
             );
             if(opt == "sim") {
-                entrega = new EntregaPedido(insPedido.getDataCriação(), insPedido);
-                entrega.iniciar();
-
                 dao.entreguePedido(insPedido.getIDpedido());
 
                 entregue.setText("Entregue");
                 entregue.setDisable(true);
                 entregue.setStyle("-fx-background-color: #0fa600");
             }
-        } catch (Exception e1) {
+        } catch (SQLException e1) {
             JOptionPane.showMessageDialog(
                 null, 
                 "Erro ao confirmar entrega, cancelado \nMotivo: "+e1.getMessage(),
@@ -164,21 +155,7 @@ public class PedidoPane {
                 vals,vals[1]
             );
             if(opt.equals("sim")) {
-                for (Livro val : this.dao.getLivros()) {
-
-                    insPedido.getEncomendas().forEach((liv) -> {
-                        if (val.getISBN().valorISBN().equals(liv.getISBN().valorISBN())) {
-                            val.aumentarQuantidade(1);
-                        }
-                    });
-                    this.dao.alterarLivro(val.getISBN(), val);               
-                }
-                if (this.entrega != null) {
-                    if (insPedido.getEntregue() == 1) {
-                        entrega.parar();
-                    }
-                }
-                this.dao.deletarPedido(insPedido.getIDpedido());    
+                this.dao.cancelarPedido(insPedido.getIDpedido());    
             }
             
         } catch (SQLException e1) {

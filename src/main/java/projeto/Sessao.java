@@ -1,14 +1,22 @@
 package projeto;
 
+import java.sql.SQLException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+
 import projeto.System.AdminDAO;
 import projeto.System.PerfilDAO;
 import projeto.System.UserDAO;
 import projeto.System.Models.User;
+import projeto.System.Models.valores.Permissoes;
 
 public class Sessao {
     
     private static User loggado;
     private static PerfilDAO loggadoDAO;
+    private static final Logger log = LoggerFactory.getLogger(Sessao.class);
 
     public static void setLoggado(User insUsr){
         loggado = new User(
@@ -17,6 +25,20 @@ public class Sessao {
             insUsr.getID().toString(),
             insUsr.getFunção()
         );
+
+        try {
+            for (User admin : getDAO().getUsers()) {
+                if (admin.getFunção() == Permissoes.ADMINISTRADOR) {
+                    MDC.put("email", admin.getEmail());
+                }
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        log.info("Usuario: "+ loggado.getNome() +" entrou");
+
     }
 
     public static PerfilDAO getDAO(){
@@ -43,6 +65,7 @@ public class Sessao {
     public static void deLog(){
         loggadoDAO.closeConneccao();
         loggado = null;
+        log.error("Sistema fechado");
     }
 
 }

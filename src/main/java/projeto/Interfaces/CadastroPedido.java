@@ -33,7 +33,7 @@ public class CadastroPedido extends Dialog<Pedido>{
     
     public CadastroPedido(List<Livro> insLibs, List<User> insClients){
 
-        ArrayList<Livro> encomendas = new ArrayList<>();
+        List<Livro> encomendas = new ArrayList<>();
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/PedidoCadastroPane.fxml"));
@@ -112,7 +112,7 @@ public class CadastroPedido extends Dialog<Pedido>{
             tela.getButtonTypes().addAll(confirm, cancelar);
 
             setResultConverter(dialogButton ->{
-                if(dialogButton == confirm){
+                if(dialogButton == confirm && !encomendas.isEmpty()){
                     return new Pedido(
                         Sessao.getUser(), 
                         clientes.getValue(), 
@@ -120,6 +120,12 @@ public class CadastroPedido extends Dialog<Pedido>{
                         encomendas
                     );
                 }else{
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Cadastro cancelado por falta de livros no pedido",
+                        "Erro", 
+                        0
+                    );   
                     return null;
                 }
             });

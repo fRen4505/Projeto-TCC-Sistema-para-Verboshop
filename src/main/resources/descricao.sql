@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS "pedido" (
 	"clienteID"	TEXT NOT NULL,
 	"metodoPagamento"	TEXT NOT NULL,
 	"data"	TEXT NOT NULL,
+	"dataEntrega"	TEXT NOT NULL,
 	"livrosCodigo"	TEXT,
 	"ID"	TEXT NOT NULL UNIQUE,
 	"entregue"	INTEGER,

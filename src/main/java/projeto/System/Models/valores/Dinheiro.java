@@ -8,7 +8,7 @@ public class Dinheiro {
     private Currency real = Currency.getInstance("BRL");
     private BigDecimal quantia;
 
-    public Dinheiro(double insQuantia){
+    public Dinheiro(Double insQuantia){
         if (insQuantia > 0) {
             BigDecimal tempVal = new BigDecimal(insQuantia);
             this.quantia = tempVal.setScale(real.getDefaultFractionDigits());
