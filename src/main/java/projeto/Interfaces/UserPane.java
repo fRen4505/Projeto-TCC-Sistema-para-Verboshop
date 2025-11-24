@@ -20,7 +20,7 @@ import projeto.System.Models.valores.Permissoes;
 public class UserPane {
     
     @FXML
-    private Pane usrPane;
+    private Pane usrPane = new Pane();
 
     @FXML
     private Button alterar, deletar;
@@ -37,11 +37,10 @@ public class UserPane {
     private AdminDAO dao = (AdminDAO)Sessao.getDAO();
     private User usr;
 
-    public UserPane(){}
+    private Pane painel;
 
-    public Pane painel(User insUsr){
+    public UserPane(User insUsr){
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserPane.fxml"));
             loader.setController(this);
             Pane tela = loader.load();
@@ -58,7 +57,7 @@ public class UserPane {
             usr = insUsr;
             dao = (AdminDAO) Sessao.getDAO();
             
-            return tela;
+            this.painel = usrPane;
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(
@@ -67,11 +66,17 @@ public class UserPane {
                 "erro", 
                 0
             );
-            return this.usrPane;
         }
     }
 
-    
+    public Pane painel(){
+        if (painel != null) {
+            return painel;
+        } else {
+            return null;
+        }
+    }
+
     public void userDelete(ActionEvent e){
         if (this.usr.getID().compareTo(Sessao.getUser().getID()) != 0 ) {
             String[] vals = {"sim", "não"};
@@ -88,9 +93,9 @@ public class UserPane {
                 } catch (SQLException e1) {
                     JOptionPane.showMessageDialog(
                         null, 
-                        "Erro por utilização em pedido, exclusão cancelada \n motivo: "+e1.getMessage() ,
-                        "Erro", 
-                        0
+                        "Proibida a exclusão por cadastro estar sendo utilizado em pedido, exclusão cancelada \n motivo: "+e1.getMessage() ,
+                        "Proibição", 
+                        2
                     );
                 }
             }

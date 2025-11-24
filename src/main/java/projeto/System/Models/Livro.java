@@ -69,6 +69,7 @@ public class Livro {
     public Dinheiro getPreço() {
         return Preço;
     }
+
     public void setPreço(double preço) {
         Preço.novaQuantia(preço);
     }
@@ -76,11 +77,13 @@ public class Livro {
     public Integer getQuantidade() {
         return Quantidade;
     }
+
     public void aumentarQuantidade(Integer insQuantidade) {
         if (insQuantidade >= 0) {
             this.Quantidade = Quantidade + insQuantidade;
         }
     }
+    
     public void diminuirQunatidade(Integer insQuantidade){
         if (insQuantidade > 0) {
             if ( (Quantidade - insQuantidade) < 0 ) {

@@ -50,7 +50,8 @@
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Button fx:id="sair" layoutX="580.0" layoutY="19.0" mnemonicParsing="false" onAction="#sairTela" text="Sair" />
+                  <Button fx:id="sair" layoutX="743.0" layoutY="19.0" mnemonicParsing="false" onAction="#sairTela" text="Sair" />
+                  <Button fx:id="alterar" layoutX="14.0" layoutY="49.0" mnemonicParsing="false" onAction="#alterarPerfil" prefHeight="25.0" prefWidth="140.0" text="Alterar Perfil" />
                </children>
           </AnchorPane>
         </children>

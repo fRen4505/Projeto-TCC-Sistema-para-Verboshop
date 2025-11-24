@@ -51,14 +51,14 @@
                      <items>
                         <AnchorPane minWidth="400.0" prefHeight="550.0" prefWidth="400.0">
                            <children>
-                              <ScrollPane minWidth="400.0" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane minWidth="400.0" prefHeight="558.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
                                     <VBox fx:id="livList" minWidth="400.0" prefHeight="550.0" prefWidth="400.0" />
                                  </content>
                               </ScrollPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane minWidth="200.0" prefHeight="200.0">
+                        <AnchorPane prefWidth="170.0">
                            <children>
                               <Button fx:id="novoLote" layoutX="87.0" layoutY="231.0" mnemonicParsing="false" onAction="#novoLote" text="Novo lote" />
                               <Label fx:id="livroQtnd" layoutX="50.0" layoutY="139.0" prefHeight="20.0" prefWidth="140.0" text="Livros:" />

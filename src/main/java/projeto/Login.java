@@ -139,26 +139,38 @@ public class Login {
     public void logging(ActionEvent e){
 
         try {
-            RadioButton logFuncao = (RadioButton) funcao.getSelectedToggle();
-    
-            User temp = new User(
-                insNome.getText(), 
-                insMail.getText(), 
-                Permissoes.valueOf(logFuncao.getText().toUpperCase())
-            );
-    
-            this.usuarios.forEach(usr -> {
-    
-                if (temp.getNome().equals(usr.getNome()) 
-                    && temp.getEmail().equals(usr.getEmail()) 
-                    && temp.getFunção().getPermissaoNome().equals(usr.getFunção().name())
-                ) {       
-                    Sessao.setLoggado(usr);
-    
-                    new Main().entrar(stage);
+            if (logButton.isArmed()) {
+
+                RadioButton logFuncao = (RadioButton) funcao.getSelectedToggle();
+        
+                User temp = new User(
+                    insNome.getText(), 
+                    insMail.getText(), 
+                    Permissoes.valueOf(logFuncao.getText().toUpperCase())
+                );
+        
+                boolean tem = false;
+                for (User usr : usuarios) {
+                    if ( temp.getNome().equals(usr.getNome()) 
+                        && temp.getEmail().equals(usr.getEmail()) 
+                        && temp.getFunção().getPermissaoNome().equals(usr.getFunção().name())
+                    ) {       
+                        Sessao.setLoggado(usr);
+                        new Main().entrar(stage);
+
+                        tem = true;
+                        break;
+                    }
                 }
-                
-            });
+                if (tem == false) {
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "dados inseridos não constam com nenhum usuarios cadastrado",
+                        "Informações erradas", 
+                        2
+                    );
+                }
+            }
     
         }catch (NullPointerException e2) {
             JOptionPane.showMessageDialog(

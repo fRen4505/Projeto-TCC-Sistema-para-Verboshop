@@ -49,7 +49,7 @@ public class AlterarLivro extends Dialog<Livro>{
                         altTitulo.getText(),
                         altAutor.getText(), 
                         altEdit.getText(), 
-                        Double.parseDouble(altPreco.getText().substring(altPreco.getText().indexOf(" ") + 1)), 
+                        Double.parseDouble(altPreco.getText().replace(',', '.').substring(altPreco.getText().indexOf(" ") + 1)), 
                         Integer.parseInt(qtnd.getText())
                     );
                 } else {

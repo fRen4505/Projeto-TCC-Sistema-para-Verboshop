@@ -19,11 +19,11 @@
                <children>
                   <SplitPane dividerPositions="0.6604010025062657" layoutX="301.0" layoutY="4.0" prefHeight="396.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0">
                      <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="378.0" prefWidth="478.0">
+                        <AnchorPane minWidth="400.0">
                            <children>
-                              <ScrollPane prefHeight="554.0" prefWidth="599.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane minWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
-                                    <VBox fx:id="pedidoList" prefHeight="553.0" prefWidth="796.0">
+                                    <VBox fx:id="pedidoList">
                                        <padding>
                                           <Insets bottom="20.0" />
                                        </padding></VBox>

@@ -18,7 +18,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import projeto.Interfaces.CadastroPedido;
@@ -46,7 +45,7 @@ public class UserCTRL {
     @FXML
     private Label userName = new Label();
     @FXML
-    private VBox livList, pedList; //= new VBox();
+    private VBox livList, pedList;
 
     @FXML
     private Label livroQtnd = new Label("Livros: ");
@@ -67,7 +66,6 @@ public class UserCTRL {
     @FXML
     private ListView<String> clientList;
 
-    private User loggedUser;
     private UserDAO dao;
 
     private List<Livro> livros;
@@ -83,12 +81,11 @@ public class UserCTRL {
         if (usrIns.getFunção() == Permissoes.USUARIO) {
             try {
                 this.stage = insTela;
-                this.loggedUser = usrIns;
                 this.dao = (UserDAO) Sessao.getDAO();
 
-                this.userName.setText(this.userName.getText() + loggedUser.getNome());
                 this.stage.setTitle("Gerenciamento");
-                
+                this.userName.setText(this.userName.getText() + Sessao.getUser().getNome());
+         
             }catch (NullPointerException e) {
                 JOptionPane.showMessageDialog(
                     null, 
@@ -104,11 +101,16 @@ public class UserCTRL {
 
     public void initUSRtela(ActionEvent e){
         try {
+            this.dao = (UserDAO) Sessao.getDAO();
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserGUI.fxml"));
             loader.setController(this);
             Parent tela = loader.load();                
                 
             Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
+
+            this.userName.setText(this.userName.getText() + Sessao.getUser().getNome());
+            this.stage.setTitle("Gerenciamento");
 
             Scene cena = new Scene(tela);
             currStage.setScene(cena);
@@ -124,10 +126,13 @@ public class UserCTRL {
         }
     }
 
-    public void sairTela(){
+    public void sairTela(ActionEvent e){
         Sessao.deLog();
-        this.loggedUser = null;
         this.stage.close();
+    }
+
+    public void alterarPerfil(ActionEvent e){
+
     }
 
     //===============================METODOS PARA LIVROS===============================
@@ -150,9 +155,7 @@ public class UserCTRL {
                 }
                 total = total + livro.getQuantidade(); 
 
-                Pane livPane = new LivroPane().painel(livro);
-
-                livList.getChildren().add(livPane);
+                livList.getChildren().add(new LivroPane(livro).painel());
             }
             
             totalLivros.setText(totalLivros.getText() + total);
@@ -189,19 +192,20 @@ public class UserCTRL {
             ).showAndWait();
 
             lote.ifPresent(loteContent ->{
-                for (Livro loteLivro : loteContent) {
-                    try {
+                try {
+                    for (Livro loteLivro : loteContent) {
                         this.dao.alterarLivro(loteLivro.getISBN(), loteLivro);
-                        this.livrosTela(e);
-                    } catch (SQLException e1) {
-                        JOptionPane.showMessageDialog(
-                            null, 
-                            "Falha a cadastrar novo lote \nMotivo: "+e1.getMessage(),
-                            "Erro", 
-                            0
-                        ); 
-                    }
+                    }                    
+                    this.livrosTela(e);
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Falha a cadastrar novo lote \nMotivo: "+e1.getMessage(),
+                        "Erro", 
+                        0
+                    ); 
                 }
+               
             });
 
         } catch (SQLException e1) {
@@ -229,23 +233,24 @@ public class UserCTRL {
             int cartao = 0;
             int dinheiro = 0;
 
-            pedList.setSpacing(27.5);
+            //pedList.setSpacing(27.5);
 
             pedidos = Sessao.getDAO().getPedidos();
             for (Pedido pedido : pedidos) {
-                if (pedido.getPagamento() == Pagamentos.DINHEIRO) {
-                    dinheiro = dinheiro + 1;
+                if (pedido.getEntregue() == 1) {
+                    Sessao.getDAO().entreguePedido(pedido.getIDpedido());
+                }if(pedido != null){
+                    if (pedido.getPagamento() == Pagamentos.DINHEIRO) {
+                        dinheiro = dinheiro + 1;
+                    }
+                    if (pedido.getPagamento() == Pagamentos.PIX) {
+                        pix = pix + 1;
+                    }
+                    if (pedido.getPagamento() == Pagamentos.CREDITO || pedido.getPagamento() == Pagamentos.DEBITO) {
+                        cartao = cartao + 1;
+                    }
+                    pedList.getChildren().add( new PedidoPane(pedido).painel() );
                 }
-                if (pedido.getPagamento() == Pagamentos.PIX) {
-                    pix = pix + 1;
-                }
-                if (pedido.getPagamento() == Pagamentos.CREDITO || pedido.getPagamento() == Pagamentos.DEBITO) {
-                    cartao = cartao + 1;
-                }
-
-                Pane pedPane = new PedidoPane().painel(pedido);
-
-                pedList.getChildren().add(pedPane);
             }
 
             qtndPedido.setText(qtndPedido.getText()+pedidos.size());

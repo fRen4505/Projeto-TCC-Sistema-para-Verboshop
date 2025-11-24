@@ -24,6 +24,7 @@ C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\D
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\InitDAO.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\Livro.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\Pedido.java
+C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\RelatorioLayout.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\User.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\CodigoISBN.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Dinheiro.java
@@ -31,6 +32,5 @@ C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\M
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Pagamentos.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Models\valores\Permissoes.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\PerfilDAO.java
-C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\Services\RelatorioLayout.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\System\UserDAO.java
 C:\Users\Usuario\Desktop\VS Filés\tcc-definitivo\src\main\java\projeto\UserCTRL.java

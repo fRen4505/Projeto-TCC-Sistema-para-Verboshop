@@ -20,7 +20,7 @@ import projeto.System.Models.valores.Permissoes;
 public class LivroPane {
 
     @FXML
-    private Pane livPane;
+    private Pane livPane = new Pane();
 
     @FXML
     private Button alterar = new Button(), deletar = new Button();
@@ -41,9 +41,9 @@ public class LivroPane {
     private PerfilDAO dao = Sessao.getDAO();
     private Livro insLivro;
 
-    public LivroPane(){}
+    private Pane painelLivro;
 
-    public Pane painel(Livro insLiv){
+    public LivroPane(Livro insLiv){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/LivroPane.fxml"));
             loader.setController(this);
@@ -68,7 +68,7 @@ public class LivroPane {
 
             insLivro = insLiv;
             
-            return tela;
+            this.painelLivro = livPane;
 
         } catch (Exception e1) {
             JOptionPane.showMessageDialog(
@@ -77,7 +77,14 @@ public class LivroPane {
                 "erro", 
                 0
             );
-            return this.livPane;
+        }
+    }
+
+    public Pane painel(){
+        if (painelLivro != null) {
+            return painelLivro;
+        } else {
+            return null;
         }
     }
 
@@ -94,8 +101,16 @@ public class LivroPane {
 
             if (Sessao.getUser().getFunção() == Permissoes.ADMINISTRADOR && opt == "sim") {
                 AdminDAO daoAlt = ((AdminDAO) this.dao);
-                
-                daoAlt.deletarLivro(insLivro.getISBN());
+                if (daoAlt.pedidoContemLivro(this.insLivro.getISBN()) == false) {
+                    daoAlt.deletarLivro(insLivro.getISBN());
+                }else{
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Proibida a exclusão pelo livro ainda estar sendo utilizado nos registros de pedidos",
+                        "Proibido", 
+                        2
+                    ); 
+                }
             }
         } catch (SQLException e1) {
             JOptionPane.showMessageDialog(

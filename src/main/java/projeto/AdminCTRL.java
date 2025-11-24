@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
@@ -17,6 +16,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import javax.swing.JOptionPane;
+
+import projeto.Interfaces.AlterarUser;
 import projeto.Interfaces.CadastrarLivro;
 import projeto.Interfaces.CadastroPedido;
 import projeto.Interfaces.CadastroUser;
@@ -35,7 +36,7 @@ public class AdminCTRL {
     private Stage stage;
 
     @FXML
-    private Button usersPage, livrosPage, pedidosPage, novoUser, novoLivro, novoPedido, voltar, sair;
+    private Button usersPage, livrosPage, pedidosPage, novoUser, novoLivro, novoPedido, alterar, voltar, sair;
     @FXML
     private Label userName = new Label();
     @FXML
@@ -68,7 +69,6 @@ public class AdminCTRL {
     @FXML
     private Label qtndPedido = new Label("Pedidos: ");
 
-    private User loggedUser;
     private AdminDAO dao;
                 
     private List<User> usuarios;
@@ -85,11 +85,10 @@ public class AdminCTRL {
 
             try {
                 this.stage = insTela;
-                this.loggedUser = usrIns;
                 this.dao = (AdminDAO) Sessao.getDAO();
 
-                this.userName.setText(this.userName.getText() + loggedUser.getNome());
                 this.stage.setTitle("Gerenciamento");
+                this.userName.setText(this.userName.getText() + Sessao.getUser().getNome());
          
             }catch (NullPointerException e) {
                 JOptionPane.showMessageDialog(
@@ -108,9 +107,7 @@ public class AdminCTRL {
     //===============================METODOS PARA GUI===============================
 
     public void initADMtela(ActionEvent e){
-        
         try {
-            this.loggedUser = Sessao.getUser();
             this.dao = (AdminDAO) Sessao.getDAO();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminGUI.fxml"));
@@ -119,7 +116,7 @@ public class AdminCTRL {
                 
             Stage currStage = (Stage)((Node) e.getSource()).getScene().getWindow();
 
-            this.userName.setText(this.userName.getText() + loggedUser.getNome());
+            this.userName.setText(this.userName.getText() + Sessao.getUser().getNome());
             this.stage.setTitle("Gerenciamento");
 
             Scene cena = new Scene(tela);
@@ -136,10 +133,44 @@ public class AdminCTRL {
         }
     }
 
-    public void sairTela(){
+    public void sairTela(ActionEvent e){
         Sessao.deLog();
-        this.loggedUser = null;
         this.stage.close();
+    }
+
+    public void alterarPerfil(ActionEvent e){
+
+        Optional<User> alterado = new AlterarUser(Sessao.getUser()).showAndWait();
+
+        alterado.ifPresent(alt -> {
+            try {
+                if (alt.getFunção() == Permissoes.ADMINISTRADOR) {
+                    this.dao.alterarUser(Sessao.getUser().getID(), alt);
+                    this.initADMtela(e);
+                }else{
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Não altere a função enquanto esta loggado, mude com outra conta de admionistrador",
+                        "Atenção", 
+                        2
+                    );
+                }
+            }catch (SQLException e1) {
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Falha a cadastrar usuario \nMotivo: "+e1.getMessage(),
+                    "Erro", 
+                    0
+                ); 
+            }catch (NullPointerException e1) {
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Falha a cadastrar usuario por falta de dados",
+                    "Erro", 
+                    0
+                ); 
+            }
+        });
     }
 
     //===============================METODOS PARA USUARIOS===============================
@@ -167,9 +198,7 @@ public class AdminCTRL {
                     cliens++;
                 }
 
-                Pane usrPane = new UserPane().painel(usr);
-
-                users.getChildren().add(usrPane);
+                users.getChildren().add(new UserPane(usr).painel());
             }
 
             total.setText(total.getText() + usuarios.size());
@@ -230,7 +259,6 @@ public class AdminCTRL {
 
     public void livrosTela(ActionEvent e){
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminLivroGUI.fxml"));
             loader.setController(this);
             Parent tela = loader.load();
@@ -247,9 +275,7 @@ public class AdminCTRL {
                 }
                 total = total + liv.getQuantidade(); 
 
-                Pane libPane = new LivroPane().painel(liv);
-
-                livList.getChildren().add(libPane);
+                livList.getChildren().add(new LivroPane(liv).painel());
             }
 
             totalLivros.setText(totalLivros.getText() + total);
@@ -333,7 +359,7 @@ public class AdminCTRL {
             for (Pedido ped : pedidos) {
                 if (ped.getEntregue() == 1) {
                     Sessao.getDAO().entreguePedido(ped.getIDpedido());
-                }else{
+                }if(ped != null){
                     if (ped.getPagamento() == Pagamentos.DINHEIRO) {
                         dinheiro = dinheiro + 1;
                     }
@@ -343,7 +369,7 @@ public class AdminCTRL {
                     if (ped.getPagamento() == Pagamentos.CREDITO || ped.getPagamento() == Pagamentos.DEBITO) {
                         cartao = cartao + 1;
                     }
-                    pedidoList.getChildren().add( new PedidoPane().painel(ped) );
+                    pedidoList.getChildren().add( new PedidoPane(ped).painel() );
                 }
             }
             

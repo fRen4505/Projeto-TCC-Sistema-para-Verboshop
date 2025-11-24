@@ -39,12 +39,13 @@ public class Main extends Application{
 
             case ADMINISTRADOR:
                 try {
+                    log.info("administrador: " + Sessao.getUser().getNome() + " loggou");
                     AdminCTRL adminLog = new AdminCTRL(Sessao.getUser(), stage);
 
                     loader = new FXMLLoader(getClass().getResource("/GUIs/AdminGUI.fxml"));
                     loader.setController(adminLog);
                     root = loader.load();
-                                                
+                                                                    
                     cena = new Scene(root);
                     stage.setScene(cena);
                     stage.show();
@@ -61,6 +62,7 @@ public class Main extends Application{
 
             case USUARIO:
                 try {
+                    log.info("usuario: " + Sessao.getUser().getNome() + " loggou");
                     UserCTRL userLog = new UserCTRL(Sessao.getUser(), stage);
                             
                     loader = new FXMLLoader(getClass().getResource("/GUIs/UserGUI.fxml"));
@@ -80,6 +82,7 @@ public class Main extends Application{
                     );
                 }
                 break;
+                
             default:
             
                 break;
@@ -99,8 +102,6 @@ public class Main extends Application{
                 );
                 if (opt.equals("sim")) {
                     log.error("Sistema fechando");
-                }else{
-                    
                 }
             }
             

@@ -34,17 +34,6 @@ public class AlterarUser extends Dialog<User>{
             altNome.setText(usr.getNome());
             altMail.setText(usr.getEmail());
 
-            switch (usr.getFunção()) {
-                case ADMINISTRADOR: altAdmin.arm();
-                    break;
-
-                case USUARIO: altUser.arm();
-                    break;
-            
-                default:
-                    break;
-            }
-
             ButtonType confirm = new ButtonType("Alterar", ButtonData.OK_DONE);
             ButtonType cancelar = new ButtonType("Cancelar", ButtonData.CANCEL_CLOSE);
             tela.getButtonTypes().addAll(confirm, cancelar);

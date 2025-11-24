@@ -22,7 +22,7 @@ import projeto.System.Models.valores.Permissoes;
 public class PedidoPane {
     
     @FXML
-    private Pane pedPane;
+    private Pane pedPane = new Pane();
 
     @FXML
     private Button entregue = new Button("Entregar"), cancelar;
@@ -42,14 +42,13 @@ public class PedidoPane {
 
     private PerfilDAO dao = Sessao.getDAO();
     private Pedido insPedido;
+    private Pane painel;
     
     @FXML
     private ListView<String> encoList = new ListView<>();
     private HashMap<String, Integer> encoVals = new HashMap<>();
 
-    public PedidoPane(){}
-
-    public Pane painel(Pedido insPed){
+    public PedidoPane(Pedido insPed){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/PedidoPane.fxml"));
             loader.setController(this);
@@ -100,7 +99,7 @@ public class PedidoPane {
             
             insPedido = insPed;
 
-            return tela;
+            this.painel = pedPane;
 
         }catch (IOException e1) {
             JOptionPane.showMessageDialog(
@@ -109,12 +108,18 @@ public class PedidoPane {
                 "erro", 
                 0
             );  
-            return this.pedPane;       
         }
     }
-    
-    public void pedidoEntregue(ActionEvent e){
 
+    public Pane painel(){
+        if (painel != null) {
+            return painel;
+        } else {
+            return null;
+        }
+    }
+
+    public void pedidoEntregue(ActionEvent e){
         try {
             String[] vals = {"sim", "não"};
             String opt = (String)JOptionPane.showInputDialog(null, 
@@ -144,7 +149,6 @@ public class PedidoPane {
     }
 
     public void pedidoCancelar(ActionEvent e){
-
         try {
             String[] vals = {"sim", "não"};
             String opt = (String)JOptionPane.showInputDialog(null, 
@@ -165,8 +169,7 @@ public class PedidoPane {
                 "Erro", 
                 0
             );}
-        }    
-        
+        }      
     }
  
 

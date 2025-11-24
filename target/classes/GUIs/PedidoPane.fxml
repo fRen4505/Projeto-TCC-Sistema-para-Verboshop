@@ -5,7 +5,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane prefHeight="220.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="pedPane" prefHeight="220.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="client" prefHeight="37.0" prefWidth="320.0" style="-fx-padding:10;" text="Cliente:" />
       <Button fx:id="entregue" layoutX="10.0" layoutY="170.0" mnemonicParsing="false" onAction="#pedidoEntregue" prefHeight="40.0" prefWidth="65.0" text="Entregue" />

@@ -9,21 +9,22 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <VBox prefHeight="400.0" prefWidth="640.0">
          <children>
             <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="359.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
                <children>
-                  <SplitPane dividerPositions="0.5" layoutX="69.0" layoutY="54.0" prefHeight="400.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.6140350877192983" layoutX="69.0" layoutY="54.0" prefHeight="400.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane minWidth="400.0" prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <ScrollPane prefHeight="558.0" prefWidth="396.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane prefHeight="558.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
-                                    <VBox fx:id="pedList" prefHeight="540.0" prefWidth="495.0">
+                                    <VBox fx:id="pedList">
                                        <padding>
                                           <Insets bottom="20.0" top="20.0" />
                                        </padding></VBox>
@@ -34,16 +35,21 @@
                               </ScrollPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane maxWidth="300.0" prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane prefHeight="558.0" prefWidth="295.0">
                            <children>
-                              <Button fx:id="novoCliente" layoutX="116.0" layoutY="186.0" mnemonicParsing="false" onAction="#clienteNovo" text="Novo cliente" />
-                              <Button fx:id="novoPedido" layoutX="115.0" layoutY="331.0" mnemonicParsing="false" onAction="#pedidoNovo" text="Novo pedido" />
-                              <ListView fx:id="clientList" layoutX="23.0" layoutY="14.0" prefHeight="167.0" prefWidth="270.0" />
-                              <Label fx:id="qtndPedido" layoutX="103.0" layoutY="240.0" prefHeight="20.0" prefWidth="110.0" text="Pedidos:" />
-                              <Label fx:id="pedidoPIX" layoutX="103.0" layoutY="260.0" prefHeight="20.0" prefWidth="110.0" text="Pedidos com PIX:" />
-                              <Label fx:id="pedidoDinher" layoutX="103.0" layoutY="280.0" prefHeight="20.0" prefWidth="130.0" text="Pedidos com dinheiro:" />
-                              <Label fx:id="pedidoCartao" layoutX="103.0" layoutY="300.0" prefHeight="20.0" prefWidth="130.0" text="Pedidos com cartão:" />
-                           </children></AnchorPane>
+                              <Pane layoutX="18.0" layoutY="14.0">
+                                 <children>
+                                    <Button fx:id="novoCliente" layoutX="94.0" layoutY="178.0" mnemonicParsing="false" onAction="#clienteNovo" text="Novo cliente" />
+                                    <Button fx:id="novoPedido" layoutX="83.0" layoutY="316.0" mnemonicParsing="false" onAction="#pedidoNovo" text="Novo pedido" />
+                                    <ListView fx:id="clientList" prefHeight="167.0" prefWidth="270.0" />
+                                    <Label fx:id="qtndPedido" layoutX="71.0" layoutY="226.0" prefHeight="20.0" prefWidth="110.0" text="Pedidos:" />
+                                    <Label fx:id="pedidoPIX" layoutX="71.0" layoutY="246.0" prefHeight="20.0" prefWidth="110.0" text="Pedidos com PIX:" />
+                                    <Label fx:id="pedidoDinher" layoutX="71.0" layoutY="266.0" prefHeight="20.0" prefWidth="130.0" text="Pedidos com dinheiro:" />
+                                    <Label fx:id="pedidoCartao" layoutX="70.0" layoutY="286.0" prefHeight="20.0" prefWidth="130.0" text="Pedidos com cartão:" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </AnchorPane>
                      </items>
                   </SplitPane>
                </children>

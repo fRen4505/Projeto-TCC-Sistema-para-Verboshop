@@ -40,7 +40,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <VBox prefHeight="400.0" prefWidth="640.0">
         <children>
@@ -50,7 +50,7 @@
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Button fx:id="sair" layoutX="580.0" layoutY="19.0" mnemonicParsing="false" onAction="#sairTela" text="Sair" />
+                  <Button fx:id="sair" layoutX="581.0" layoutY="19.0" mnemonicParsing="false" onAction="#sairTela" text="Sair" />
                </children>
           </AnchorPane>
         </children>

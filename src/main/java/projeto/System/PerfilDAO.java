@@ -129,7 +129,7 @@ public abstract class PerfilDAO extends DAO implements UserInterface, LivroInter
                 );
             } else {
                 encomendadosList.putIfAbsent(insLiv.getISBN().valorISBN(), 1);
-                titulos = titulos + insLiv.getTitulo() + " ";
+                titulos = titulos + insLiv.getTitulo() + " - ";
             }
         }
 
@@ -231,6 +231,23 @@ public abstract class PerfilDAO extends DAO implements UserInterface, LivroInter
         }
 
         return pedidosSalvos;
+    }
+
+    public Boolean pedidoContemLivro(CodigoISBN livCode) throws SQLException{
+
+        for (Pedido ped : this.getPedidos()) {
+            for (Livro livro : ped.getEncomendas()) {
+            
+                if (livro.getISBN().valorISBN().equals(livCode.valorISBN())) {
+                    return true;
+                } else {
+                    continue;
+                }
+            }
+        }
+       
+        return false;
+    
     }
 
     @Override

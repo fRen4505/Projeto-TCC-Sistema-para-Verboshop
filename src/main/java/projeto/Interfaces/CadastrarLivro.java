@@ -36,7 +36,7 @@ public class CadastrarLivro extends Dialog<Livro>{
                         insTitulo.getText(),
                         insAutor.getText(), 
                         insEdit.getText(), 
-                        Double.parseDouble(insPreco.getText()), 
+                        Double.parseDouble(insPreco.getText().replace(',', '.')), 
                         Integer.parseInt(insQtnd.getText()),
                         insCode.getText()
                     );

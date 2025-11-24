@@ -51,11 +51,11 @@
                <children>
                   <SplitPane dividerPositions="0.650375939849624" layoutX="301.0" layoutY="4.0" prefHeight="396.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="378.0" prefWidth="400.0">
+                      <AnchorPane>
                            <children>
-                              <ScrollPane prefHeight="554.0" prefWidth="489.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane prefHeight="554.0" prefWidth="516.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
-                                    <VBox fx:id="livList" prefHeight="554.0" prefWidth="797.0">
+                                    <VBox fx:id="livList">
                                        <padding>
                                           <Insets bottom="10.0" />
                                        </padding></VBox>
