@@ -10,7 +10,6 @@
  	    <sift>
             <appender name="EMAIL-${email}" class="ch.qos.logback.classic.net.SMTPAppender">
                
-                 
                 <smtpHost> INSERIR HOST</smtpHost>
                 <smtpPort> INSERIR PORT</smtpPort>
 

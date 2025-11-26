@@ -1,5 +1,6 @@
 package projeto.Interfaces;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -117,24 +118,28 @@ public class CadastroPedido extends Dialog<Pedido>{
 
             setResultConverter(dialogButton ->{
                 if(dialogButton == confirm && !encomendas.isEmpty()){
-                    return new Pedido(
-                        Sessao.getUser(), 
-                        clientes.getValue(), 
-                        metodos.getValue(),
-                        encomendas
-                    );
+                    try {
+                        return new Pedido(
+                            Sessao.getUser(), 
+                            clientes.getValue(), 
+                            metodos.getValue(),
+                            encomendas
+                        );
+                    } catch (NullPointerException e1) {
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Cadastro cancelado por falta de dados: " + e1.getMessage(),
+                            "Erro", 
+                            0
+                        );   
+                        return null;
+                    }
                 }else{
-                    JOptionPane.showMessageDialog(
-                        null, 
-                        "Cadastro cancelado por falta de livros no pedido",
-                        "Erro", 
-                        0
-                    );   
                     return null;
                 }
             });
 
-        } catch (Exception e2) {
+        } catch (IOException e2) {
             JOptionPane.showMessageDialog(
                 null, 
                 "Erro por "+e2.getMessage() + ", cadastro cancelado",

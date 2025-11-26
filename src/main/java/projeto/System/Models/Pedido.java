@@ -16,19 +16,17 @@ public class Pedido {
     private UUID IDPedido;
     private Integer Entregue;
 
-    public Pedido(User insCriador, User insCLient, Pagamentos insPaga, List<Livro> insEncomendas){
-        try {
-            if (insCriador != null && insCLient!= null && insPaga!= null && insEncomendas != null) {
-                this.Criador = insCriador;
-                this.Cliente = insCLient;
-                this.pagamento = insPaga;
-                this.DataCriação = LocalDateTime.now();
-                this.DataEntrega = DataCriação.plusDays(29); 
-                this.Encomendas = insEncomendas;
-                this.IDPedido = UUID.randomUUID();
-            }
-        }catch (NullPointerException e) {
-            throw new NullPointerException("Falta ou inexistencia de dados para pedido \n" + e.getMessage());
+    public Pedido(User insCriador, User insCLient, Pagamentos insPaga, List<Livro> insEncomendas) throws NullPointerException{
+        if (insCriador != null && insCLient!= null && insPaga!= null && insEncomendas != null) {
+            this.Criador = insCriador;
+            this.Cliente = insCLient;
+            this.pagamento = insPaga;
+            this.DataCriação = LocalDateTime.now();
+            this.DataEntrega = DataCriação.plusDays(29); 
+            this.Encomendas = insEncomendas;
+            this.IDPedido = UUID.randomUUID();
+        }else{
+            throw new NullPointerException("Falta ou inexistencia de dados para pedido \n");
         }
     }
 
@@ -40,7 +38,7 @@ public class Pedido {
         this.DataEntrega = LocalDateTime.parse(insDataEntrega);
     }
 
-    public List<Livro> getEncomendas() {
+    public List<Livro> getEncomendas() throws NullPointerException{
         if (Encomendas != null) {
             return Encomendas;
         } else {

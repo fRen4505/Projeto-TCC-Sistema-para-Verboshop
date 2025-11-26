@@ -244,13 +244,6 @@ public class AdminCTRL {
                     "Erro", 
                     0
                 ); 
-            }catch (NullPointerException e1) {
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "Falha a cadastrar usuario por falta de dados",
-                    "Erro", 
-                    0
-                ); 
             }
         });
             
@@ -421,13 +414,6 @@ public class AdminCTRL {
             JOptionPane.showMessageDialog(
                 null, 
                 "Falha a iniciar cadastro de pedido por problema no banco \nMotivo: "+e2.getMessage(),
-                "Erro", 
-                0
-            ); 
-        }catch (NullPointerException e2) {
-            JOptionPane.showMessageDialog(
-                null, 
-                "Falha a iniciar cadastro de pedido por problema nos dados \nMotivo: "+e2.getMessage(),
                 "Erro", 
                 0
             ); 
