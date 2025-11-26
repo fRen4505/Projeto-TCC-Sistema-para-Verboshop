@@ -10,15 +10,17 @@
  	    <sift>
             <appender name="EMAIL-${email}" class="ch.qos.logback.classic.net.SMTPAppender">
                
-                        
-                <smtpHost>smtp.maileroo.com</smtpHost>
-                <smtpPort>2525</smtpPort>
-                <username>relatorio.estoque@b4e3c0ffb8517f96.maileroo.org</username>
-                <password>a95e03594d9fda8fcad787df</password>
-                <STARTTLS>true</STARTTLS>
-                <to>${email}</to>
-                <from>relatorio.estoque@b4e3c0ffb8517f96.maileroo.org</from>
+                <smtpHost> INSERIR HOST</smtpHost>
+                <smtpPort> INSERIR PORT</smtpPort>
 
+                <username> INSERIR USUARIO DO HOST</username>
+                <password> SENHA DE USUARIO</password>
+
+                <STARTTLS>true</STARTTLS>
+            
+                <to>${email}</to>
+                <from> ENDEREÇO DADO PELO HOST</from>
+                <subject>Relatório Estoque [%date]</subject>
 
                 <layout class="projeto.System.Models.RelatorioLayout" />
             </appender>
