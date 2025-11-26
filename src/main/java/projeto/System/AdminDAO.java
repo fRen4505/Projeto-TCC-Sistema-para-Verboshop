@@ -108,7 +108,7 @@ public class AdminDAO extends PerfilDAO implements LivroAdminInterface, UserAdmi
 
         User old = getUserbyID(insUserID);
 
-        log.info("Usuario: "+old.getNome()+" teve os dados alterados: "+
+        log.info(old.getFunção().getPermissaoNome() +": "+old.getNome()+" teve os dados alterados: "+
             (!insUserAlt.getNome().equals(old.getNome()) ? old.getNome() + " para " + insUserAlt.getNome() + "\t": " ") +
             (!insUserAlt.getEmail().equals(old.getEmail()) ? old.getNome() + " para " + insUserAlt.getNome() + "\t": " ") +
             (!insUserAlt.getFunção().toString().equals(old.getFunção().toString()) ? old.getFunção().toString() + " para " + insUserAlt.getFunção().toString() + "\t": " ") +

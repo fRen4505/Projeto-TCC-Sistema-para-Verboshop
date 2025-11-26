@@ -22,6 +22,8 @@ import projeto.System.Models.User;
 import projeto.System.Models.valores.Pagamentos;
 import projeto.System.Models.valores.Permissoes;
 
+//Classe tipo Dialog (tela pop-up) do JavaFX para inserção de dados usados no cadastro de um novo pedido,
+//sendo utilizada dentro do AdminCTRL e UserCTRL
 public class CadastroPedido extends Dialog<Pedido>{
     
     @FXML
@@ -31,6 +33,8 @@ public class CadastroPedido extends Dialog<Pedido>{
     @FXML
     private ComboBox<User> clientes = new ComboBox<>();
     
+    //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela, 
+    //alem de listar livros e clientes cadastrados para seleção a partir de listas recebidas dos DAOs
     public CadastroPedido(List<Livro> insLibs, List<User> insClients){
 
         List<Livro> encomendas = new ArrayList<>();
@@ -140,8 +144,5 @@ public class CadastroPedido extends Dialog<Pedido>{
         }
 
     }
-
-
-
 
 }

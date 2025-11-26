@@ -17,6 +17,9 @@ import projeto.System.PerfilDAO;
 import projeto.System.Models.Livro;
 import projeto.System.Models.valores.Permissoes;
 
+//Classe tipo Pane (painel) do JavaFX para organização e exibição dos dados de um Livro cadastrado,
+//disponibilizando tambem metodos para gestão destes, como alterar e deletar,
+//sendo utilizada dentro do AdminCTRL e UserCTRL
 public class LivroPane {
 
     @FXML
@@ -41,8 +44,10 @@ public class LivroPane {
     private PerfilDAO dao = Sessao.getDAO();
     private Livro insLivro;
 
+    //Representação/objeto desta interface Pane para uso em outras interfaces
     private Pane painelLivro;
 
+    //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela, e completa os dados com o informções do livro
     public LivroPane(Livro insLiv){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/LivroPane.fxml"));
@@ -80,6 +85,7 @@ public class LivroPane {
         }
     }
 
+    //Metodo que retorna a variavel PainelLivro para que se possa ser inserido em outra interface, em listas de livros especialmente
     public Pane painel(){
         if (painelLivro != null) {
             return painelLivro;
@@ -88,6 +94,8 @@ public class LivroPane {
         }
     }
 
+    //Metodo para exclusão do livro exibido pelo Pane, acionado ao pressionar o botão deletar,
+    //se este não estiver sendo utilizado, este é exclusivo a usuarios admin
     public void livroDelete(ActionEvent e){
         try {
             String[] vals = {"sim", "não"};
@@ -122,6 +130,8 @@ public class LivroPane {
         }
     }
 
+    //Metodo para alteração do livro exibido pelo Pane, acionado ao pressionar o botão alterar,
+    //exibindo o AlterarLivro dialog (pop-up) para inserção dos dados alternativos, este é exclusivo a usuarios admin
     public void livroAlterar(ActionEvent e){
         try {
             if (Sessao.getUser().getFunção() == Permissoes.ADMINISTRADOR) {

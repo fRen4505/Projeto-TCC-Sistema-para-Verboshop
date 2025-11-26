@@ -17,6 +17,9 @@ import projeto.System.AdminDAO;
 import projeto.System.Models.User;
 import projeto.System.Models.valores.Permissoes;
 
+//Classe tipo Pane (painel) do JavaFX para organização e exibição dos dados de um Usuario cadastrado,
+//disponibilizando tambem metodos para gestão deste, como alterar e deletar,
+//sendo utilizada dentro do AdminCTRL
 public class UserPane {
     
     @FXML
@@ -37,17 +40,19 @@ public class UserPane {
     private AdminDAO dao = (AdminDAO)Sessao.getDAO();
     private User usr;
 
+    //Representação/objeto desta interface Pane para uso em outras interfaces
     private Pane painel;
 
+    //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela, e completa os dados com o informções do usuario
     public UserPane(User insUsr){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserPane.fxml"));
             loader.setController(this);
             Pane tela = loader.load();
 
-            if (insUsr.getFunção() == Permissoes.CLIENTE) {
-                alterar.setVisible(false);
-            }
+            //if (insUsr.getFunção() == Permissoes.CLIENTE) {
+            //    alterar.setVisible(false);
+            //}
 
             usrNom.setText(usrNom.getText() + insUsr.getNome());
             usrMail.setText(usrMail.getText() + insUsr.getEmail());
@@ -69,6 +74,7 @@ public class UserPane {
         }
     }
 
+    //Metodo que retorna a variavel painel para que se possa ser inserido em outra interface, em listas de usuarios especialmente
     public Pane painel(){
         if (painel != null) {
             return painel;
@@ -77,6 +83,8 @@ public class UserPane {
         }
     }
 
+    //Metodo para exclusão do usuario exibido pelo Pane, acionado ao pressionar o botão deletar,
+    //se este não estiver sendo utilizado nem for o usuario loggado, este é exclusivo a usuarios admin
     public void userDelete(ActionEvent e){
         if (this.usr.getID().compareTo(Sessao.getUser().getID()) != 0 ) {
             String[] vals = {"sim", "não"};
@@ -110,6 +118,8 @@ public class UserPane {
         
     }
 
+    //Metodo para alteração do usuario exibido pelo Pane, acionado ao pressionar o botão alterar,
+    //exibindo o AlterarUser dialog (pop-up) para inserção dos dados alternativos, este é exclusivo a usuarios admin
     public void userAlterar(ActionEvent e){
         if( this.usr.getID().compareTo(Sessao.getUser().getID()) != 0 ) {
 

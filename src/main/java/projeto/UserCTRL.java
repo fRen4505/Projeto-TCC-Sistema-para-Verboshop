@@ -32,10 +32,10 @@ import projeto.System.Models.User;
 import projeto.System.Models.valores.Pagamentos;
 import projeto.System.Models.valores.Permissoes;
 
+//Metodo controller para as interfaces do usuario padrão/caixa, 
+//dando funcionalidade a estas telas e acesso ao banco pelos objetos DAO
 public class UserCTRL {
     
-    private Stage stage;
-
     @FXML
     private Button livrosPage, pedidosPage, voltar, sair, novoPedido, novoCliente, novoLote;
     @FXML
@@ -66,12 +66,21 @@ public class UserCTRL {
     @FXML
     private ListView<String> clientList;
 
+    private Stage stage;
+
+    //Classe do tipo PerfilDAO que realiza todas as operações do banco o um perfil padrão é permitido
     private UserDAO dao;
 
+    //lista de pedidos cadastrados
     private List<Livro> livros;
+
+    //lista de pedidos cadastrados
     private List<Pedido> pedidos;
+    
+    //lista de usuarios cadastrados
     private List<User> usuarios;
 
+    //Construtor da classe, que configura os principais dados deste controller
     public UserCTRL(User usrIns, Stage insTela){
 
         if (usrIns == null) {
@@ -99,6 +108,10 @@ public class UserCTRL {
         }
     }
 
+    //===============================METODOS PARA GUI===============================
+
+    //Metodo da tela inicial, define o layout (o fxml) e inclui os componentes da tela 
+    //assim possibilitando acesso as outras interfaces
     public void initUSRtela(ActionEvent e){
         try {
             this.dao = (UserDAO) Sessao.getDAO();
@@ -126,17 +139,16 @@ public class UserCTRL {
         }
     }
 
+    //Metodo para sair da tela inicial e terminar o programa, executado quando o botão de sair é pressionado
     public void sairTela(ActionEvent e){
         Sessao.deLog();
         this.stage.close();
     }
 
-    public void alterarPerfil(ActionEvent e){
-
-    }
-
     //===============================METODOS PARA LIVROS===============================
     
+    //Metodo para tela principal da gestão de livros, define o layout (o fxml), inclui os componentes da tela, 
+    //e insere os objetos LivroPane para cada livro presente e seus dados, tambem possibilita o cadastro de novos livros
     public void livrosTela(ActionEvent e){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserLivroGUI.fxml"));
@@ -184,6 +196,9 @@ public class UserCTRL {
         }
     }
 
+    //Metodo para cadastro de novo lote,
+    //uma quantidade de certos livros selecionados que ao cadastrar aumentam a quantidade presente no estoque,
+    //se abre uma tela de pop-up para seleção dos livros e quantidades, 
     public void novoLote(ActionEvent e){
 
         try {
@@ -221,6 +236,9 @@ public class UserCTRL {
 
     //===============================METODOS PARA PEDIDOS===============================
 
+    //Metodo para tela principal da gestão de pedidos, define o layout (o fxml), inclui os componentes da tela, 
+    //e insere os objetos PedidoPane para cada pedido realizado e não entregue e seus dados,
+    //tambem possibilita o cadastro de novos pedidos
     public void pedidosTela(ActionEvent e){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/UserPedidoGUI.fxml"));
@@ -288,6 +306,7 @@ public class UserCTRL {
 
     }
 
+    //Metodo para cadastro de novo pedido, abrindo uma tela de pop-up para inserção dos dados
     public void pedidoNovo(ActionEvent e){
         try {
             Optional<Pedido> cadastro = new CadastroPedido(
@@ -326,6 +345,9 @@ public class UserCTRL {
         }
     }
 
+    //Metodo para cadastro de novo usuario exclusivamente do tipo cliente,
+    //exitindo para agilizar e facilitar o cadastro de pedido com um cliente novo ao sistema,
+    //este abre uma tela de pop-up para inserção dos dados do novo cliente
     public void clienteNovo(ActionEvent e){
 
         Optional<User> cadastrado = new NovoClientePane().showAndWait();

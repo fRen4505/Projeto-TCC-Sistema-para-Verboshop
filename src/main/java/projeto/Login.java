@@ -20,11 +20,17 @@ import projeto.System.InitDAO;
 import projeto.System.Models.User;
 import projeto.System.Models.valores.Permissoes;
 
+//Classe de login, que possui metodos relacionados a esta função, acesso ao InitDAO, 
+//e que pode loggar um usuario e seu tipo de DAO relacionado, assim iniciando a sessão atual
 public class Login {
 
     private Stage stage;
+
+    //Classe do tipo DAO para acesso inicial do dados do banco, servindo para pegar a lista de usuarios a fim de comparar, 
+    //ou adicionar um usuario administrador caso não haja nenhum
     private static InitDAO verificação = InitDAO.getInstancia(); 
 
+    //Lista de usuarios
     private List<User> usuarios;
 
     @FXML
@@ -34,10 +40,11 @@ public class Login {
     @FXML
     private ToggleGroup funcao = new ToggleGroup();
     @FXML
-    private RadioButton adminButton = new RadioButton("Administrador"); 
-    @FXML
-    private RadioButton userButton = new RadioButton("Usuario");
+    private RadioButton adminButton = new RadioButton("Administrador"),
+                        userButton = new RadioButton("Usuario");
         
+    //Construtor do login, eles instancia sua variavel usuarios para checkar se esta vazia ou não,
+    //se esta ele abre o metodo de primeiro cadastro, se não abre o de login normal
     public Login(Stage inStage){
 
         try {
@@ -60,6 +67,7 @@ public class Login {
         }
     }
     
+    //Metodo de login padrão, define o layout (o fxml) e inclui os componentes da tela
     public void telaLogin(){
         try {
             adminButton.setToggleGroup(funcao);
@@ -84,6 +92,8 @@ public class Login {
         }
     }
 
+    //Metodo de login de primeiro cadastro, que é na primeira utilização geral do sistema onde não há usuarios loggados,
+    //mas aqui so se define o layout (o fxml) e inclui os componentes da tela
     public void telaCadastro(){
         try {
             this.stage.setTitle("Cadastro Inicial");
@@ -105,6 +115,8 @@ public class Login {
         }
     }
 
+    //Metodo de confirmação de primeiro cadastro, executado quando o botão de cadastro da interface de primeiro cadastro é pressionado
+    //assim cadastrando o primeiro usuario no sistema, sempre de tipo administrador, e depois abrindo a tela de login padrão
     public void CadastroInicial(ActionEvent e){
 
         try {
@@ -136,6 +148,9 @@ public class Login {
         
     }
 
+    //Metodo de confirmação de login, executado quando o botão de confirmação da interface de login é pressionado
+    //assim pegando os dados inseridos e os comparando com os usuarios ja cadastrados no banco de dados, 
+    //e depois, caso confirmado o cadastro, é permitido o acesso ao resto do sistema
     public void logging(ActionEvent e){
 
         try {
@@ -182,6 +197,7 @@ public class Login {
         }
     }
 
+    //Metodo para fechar a tela
     public void telaClose(){
         usuarios.clear();
         this.stage.close();

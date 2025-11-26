@@ -1,21 +1,3 @@
-/*
-CREATE TABLE IF NOT EXISTS user(
-    nome string,
-    email string,
-    id string,
-    permissao integer
-);
-
-CREATE TABLE IF NOT EXISTS livro(
-    titulo string,
-    autor string,
-    editora string,
-    isbn string,
-    dinheiro double,
-    quantidade integer
-
-);
-*/
 
 CREATE TABLE IF NOT EXISTS user(
 	"nome"	TEXT NOT NULL,

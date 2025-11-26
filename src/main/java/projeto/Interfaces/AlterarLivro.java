@@ -14,6 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ButtonBar.ButtonData;
 import projeto.System.Models.Livro;
 
+//Classe tipo Dialog (tela pop-up) do JavaFX para inserção de dados usados na alteração de um cadastro de livro,
+//sendo utilizada dentro do LivroPane
 public class AlterarLivro extends Dialog<Livro>{
     
     @FXML
@@ -23,6 +25,7 @@ public class AlterarLivro extends Dialog<Livro>{
     @FXML
     private Button add, sub;
 
+    //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela, completando os dados com o informações do livro
     public AlterarLivro(Livro ins){
 
         try {
@@ -67,10 +70,14 @@ public class AlterarLivro extends Dialog<Livro>{
         }
     }
 
+    //Metodo para aumentar valor de label que é usado para alterar quantidade do livro no estoque, 
+    //acionado ao pressionar botão + (add) desta classe
     public void addAlt(ActionEvent a){
         qtnd.setText( (Integer.parseInt(qtnd.getText()) + 1) + "");
     }
 
+    //Metodo para diminuir valor de label que é usado para alterar quantidade do livro no estoque, 
+    //acionado ao pressionar botão - (sub) desta classe
     public void subAlt(ActionEvent s){
         if (Integer.parseInt(qtnd.getText()) > 0) {
             if ( (Integer.parseInt(qtnd.getText()) - 1) < 0 ) {

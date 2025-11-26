@@ -2,6 +2,7 @@ projeto\System\Models\valores\Dinheiro.class
 projeto\System\PerfilDAO.class
 projeto\UserCTRL.class
 projeto\System\Models\User.class
+projeto\System\Models\RelatorioLayout$1.class
 projeto\Interfaces\PedidoPane.class
 projeto\Interfaces\UserPane.class
 projeto\System\Models\valores\Pagamentos.class
@@ -30,7 +31,6 @@ projeto\Main.class
 projeto\Main$2.class
 projeto\Interfaces\NovoClientePane.class
 projeto\Interfaces\CadastroPedido.class
-projeto\Interfaces\AlterarUser$1.class
 projeto\Interfaces\CadastrarLivro.class
 projeto\System\Database\SQLreader.class
 projeto\System\Models\valores\CodigoISBN.class

@@ -13,14 +13,16 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.ButtonBar.ButtonData;
 import projeto.System.Models.User;
 
+//Classe tipo Dialog (tela pop-up) do JavaFX para inserção de dados usados no cadastro de um novo usuario exclusivamente do tipo Cliente,
+//sendo utilizada dentro do UserCTRL
 public class NovoClientePane extends Dialog<User>{
 
     @FXML
     private TextField insMail;
-
     @FXML
     private TextField insNome;
 
+    //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela, 
     public NovoClientePane(){
 
         try {

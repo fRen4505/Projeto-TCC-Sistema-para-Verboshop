@@ -31,50 +31,46 @@ import projeto.System.Models.valores.Permissoes;
 import projeto.System.Models.Livro;
 import projeto.System.Models.Pedido;
 
+//Metodo controller para as interfaces de administrador, 
+//dando funcionalidade a estas telas e acesso ao banco pelos objetos DAO
 public class AdminCTRL {
-
-    private Stage stage;
 
     @FXML
     private Button usersPage, livrosPage, pedidosPage, novoUser, novoLivro, novoPedido, alterar, voltar, sair;
     @FXML
     private Label userName = new Label();
     @FXML
-    private VBox users, livList;
+    private VBox users, livList, pedidoList;
+   
     @FXML
-    private VBox pedidoList;
+    private Label total = new Label("Total perfis: "),
+                admins = new Label("Administradores: "),
+                usurs = new Label("Usuarios: "),
+                clientes = new Label("Clientes: "),
+                livroQtnd = new Label("Livros: "),
+                totalLivros = new Label("Total de livros: "),
+                livrosNone = new Label("Livros sem quantidade no estoque: "),
+                pedidoCartao = new Label("Pedidos com cartão: "),
+                pedidoDinher = new Label("Pedidos com dinheiro: "),
+                pedidoPIX = new Label("Pedidos com PIX: "),
+                qtndPedido = new Label("Pedidos: ");
 
-    @FXML
-    private Label total = new Label("Total perfis: ");
-    @FXML
-    private Label admins = new Label("Administradores: ");
-    @FXML
-    private Label usurs = new Label("Usuarios: ");
-    @FXML
-    private Label clientes = new Label("Clientes: ");
+    private Stage stage;
 
-    @FXML
-    private Label livroQtnd = new Label("Livros: ");
-    @FXML
-    private Label totalLivros = new Label("Total de livros: ");
-    @FXML
-    private Label livrosNone = new Label("Livros sem quantidade no estoque: ");
-
-    @FXML
-    private Label pedidoCartao = new Label("Pedidos com cartão: ");
-    @FXML
-    private Label pedidoDinher = new Label("Pedidos com dinheiro: ");
-    @FXML
-    private Label pedidoPIX = new Label("Pedidos com PIX: ");
-    @FXML
-    private Label qtndPedido = new Label("Pedidos: ");
-
+    //Classe do tipo PerfilDAO que realiza todas as operações do banco que um perfil padrão pode,
+    //mais as permissões dadas ao administrador
     private AdminDAO dao;
-                
+    
+    //lista de usuarios cadastrados
     private List<User> usuarios;
+
+    //lista de livros cadastrados
     private List<Livro> livros;
+
+    //lista de pedidos cadastrados
     private List<Pedido> pedidos;
     
+    //Construtor da classe, que configura os principais dados deste controller
     public AdminCTRL(User usrIns, Stage insTela){
 
         if (usrIns == null) {
@@ -82,7 +78,6 @@ public class AdminCTRL {
         }
 
         if (usrIns.getFunção() == Permissoes.ADMINISTRADOR) {
-
             try {
                 this.stage = insTela;
                 this.dao = (AdminDAO) Sessao.getDAO();
@@ -101,11 +96,12 @@ public class AdminCTRL {
         }else{
             this.stage.close();
         }
-
     }
 
     //===============================METODOS PARA GUI===============================
 
+    //Metodo da tela inicial, define o layout (o fxml) e inclui os componentes da tela 
+    //assim possibilitando acesso as outras interfaces e alteração de alguns dados do proprio cadastro do admin
     public void initADMtela(ActionEvent e){
         try {
             this.dao = (AdminDAO) Sessao.getDAO();
@@ -133,11 +129,13 @@ public class AdminCTRL {
         }
     }
 
+    //Metodo para sair da tela inicial e terminar o programa, executado quando o botão de sair é pressionado
     public void sairTela(ActionEvent e){
         Sessao.deLog();
         this.stage.close();
     }
 
+    //Metodo para o admin alterar alguns de seus dados, executado quando o botão de alterar perfil é pressionado
     public void alterarPerfil(ActionEvent e){
 
         Optional<User> alterado = new AlterarUser(Sessao.getUser()).showAndWait();
@@ -175,6 +173,8 @@ public class AdminCTRL {
 
     //===============================METODOS PARA USUARIOS===============================
 
+    //Metodo para tela principal da gestão de usuarios, define o layout (o fxml), inclui os componentes da tela, 
+    //e insere os objetos UserPane para cada usuario cadastrado e seus dados, tambem possibilita o cadastro de novos usuarios
     public void usersTela(ActionEvent e){
         try {
             
@@ -228,6 +228,7 @@ public class AdminCTRL {
         }
     }
 
+    //Metodo para cadastro de novo usuario, abrindo uma tela de pop-up para inserção dos dados
     public void userNovo(ActionEvent e){
 
         Optional<User> cadastrado = new CadastroUser().showAndWait();
@@ -257,6 +258,8 @@ public class AdminCTRL {
 
     //===============================METODOS PARA LIVROS===============================
 
+    //Metodo para tela principal da gestão de livros, define o layout (o fxml), inclui os componentes da tela, 
+    //e insere os objetos LivroPane para cada livro presente e seus dados, tambem possibilita o cadastro de novos livros
     public void livrosTela(ActionEvent e){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/AdminLivroGUI.fxml"));
@@ -304,6 +307,7 @@ public class AdminCTRL {
         }
     }
 
+    //Metodo para cadastro de novo livro, abrindo uma tela de pop-up para inserção dos dados
     public void livroNovo(ActionEvent e){
 
         Optional<Livro> cadastro = new CadastrarLivro().showAndWait();
@@ -339,7 +343,10 @@ public class AdminCTRL {
     }
 
     //===============================METODOS PARA PEDIDOS===============================
-
+    
+    //Metodo para tela principal da gestão de pedidos, define o layout (o fxml), inclui os componentes da tela, 
+    //e insere os objetos PedidoPane para cada pedido realizado e não entregue e seus dados,
+    //tambem possibilita o cadastro de novos pedidos
     public void pedidosTela(ActionEvent e){
 
         try {
@@ -401,6 +408,7 @@ public class AdminCTRL {
 
     }
 
+    //Metodo para cadastro de novo pedido, abrindo uma tela de pop-up para inserção dos dados
     public void pedidoNovo(ActionEvent e){
         
         try {
@@ -440,6 +448,5 @@ public class AdminCTRL {
         }
 
     }
-
 
 }

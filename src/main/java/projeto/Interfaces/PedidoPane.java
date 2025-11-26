@@ -19,6 +19,9 @@ import projeto.System.Models.Pedido;
 import projeto.System.Models.valores.Dinheiro;
 import projeto.System.Models.valores.Permissoes;
 
+//Classe tipo Pane (painel) do JavaFX para organização e exibição dos dados de um Pedido cadastrado,
+//disponibilizando tambem metodos para gestão destes, como cancelar e entregar,
+//sendo utilizada dentro do AdminCTRL e UserCTRL
 public class PedidoPane {
     
     @FXML
@@ -42,12 +45,15 @@ public class PedidoPane {
 
     private PerfilDAO dao = Sessao.getDAO();
     private Pedido insPedido;
+
+    //Representação/objeto desta interface Pane para uso em outras interfaces
     private Pane painel;
     
     @FXML
     private ListView<String> encoList = new ListView<>();
     private HashMap<String, Integer> encoVals = new HashMap<>();
 
+    //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela, e completa os dados com o informções do pedido
     public PedidoPane(Pedido insPed){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUIs/PedidoPane.fxml"));
@@ -111,6 +117,7 @@ public class PedidoPane {
         }
     }
 
+    //Metodo que retorna a variavel painel para que se possa ser inserido em outra interface, em listas de pedidos especialmente
     public Pane painel(){
         if (painel != null) {
             return painel;
@@ -119,6 +126,9 @@ public class PedidoPane {
         }
     }
 
+    //Metodo para marcar o pedido exibido pelo Pane como entregue, acionado ao pressionar o botão entregar,
+    //este altera a capacidade do botão de ser selecionado e define o dado entregue no banco como verdadeiro, 
+    //isso para que um pedido somente seja marcado como entregue uma vez e seja deletado do sistema 30 dias após,
     public void pedidoEntregue(ActionEvent e){
         try {
             String[] vals = {"sim", "não"};
@@ -148,6 +158,8 @@ public class PedidoPane {
 
     }
 
+    //Metodo para cancelamento do pedido exibido pelo Pane, acionado ao pressionar o botão cancelar,
+    //ao cancelar o pedido todos os livros encomendados (suas quantidades) retornam ao estoque e apos isso o pedido é deletado do sistema
     public void pedidoCancelar(ActionEvent e){
         try {
             String[] vals = {"sim", "não"};

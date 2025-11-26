@@ -25,12 +25,12 @@
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="logButton" layoutX="214.0" layoutY="240.0" mnemonicParsing="false" onAction="#logging" prefHeight="30.0" prefWidth="70.0" text="Entrar" />
-            <RadioButton fx:id="adminButton" layoutX="157.0" layoutY="185.0" mnemonicParsing="false" onAction="#logging" text="Administrador">
+            <RadioButton fx:id="adminButton" layoutX="157.0" layoutY="185.0" mnemonicParsing="false" text="Administrador">
                <toggleGroup>
                   <ToggleGroup fx:id="funcao" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="userButton" layoutX="272.0" layoutY="185.0" mnemonicParsing="false" onAction="#logging" text="Usuario" toggleGroup="$funcao" />
+            <RadioButton fx:id="userButton" layoutX="272.0" layoutY="185.0" mnemonicParsing="false" text="Usuario" toggleGroup="$funcao" />
             <Label layoutX="230.0" layoutY="150.0" text="Função" />
             <TextField id="insMail" fx:id="insMail" layoutX="176.0" layoutY="105.0" prefHeight="25.0" prefWidth="150.0" />
             <Label layoutX="205.0" layoutY="85.0" text="Email de Usuário" />

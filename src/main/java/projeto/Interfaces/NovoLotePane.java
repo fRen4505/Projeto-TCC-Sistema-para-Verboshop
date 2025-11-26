@@ -17,11 +17,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import projeto.System.Models.Livro;
 
+//Classe tipo Dialog (tela pop-up) do JavaFX para cadastro de novo lote,
+//uma coleção de livros que sua quantidade adiciona a quantidade dos livros no estoque, sendo utilizada dentro do UserCTRL
 public class NovoLotePane extends Dialog<ArrayList<Livro>>{
     
     @FXML
     private VBox loteLivs;
 
+    //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela, 
+    //alem de listar livros cadastrados e disponiveis para seleção a partir de listas recebidas dos DAOs
     public NovoLotePane(List<Livro> insLibs){
 
         HashMap<String, Integer> insLote = new HashMap<>();

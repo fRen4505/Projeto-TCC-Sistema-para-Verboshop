@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -15,13 +16,20 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import projeto.System.Models.User;
 import projeto.System.Models.valores.Permissoes;
 
+//Classe tipo Dialog (tela pop-up) do JavaFX para inserção de dados usados no cadastro de um novo usuario,
+//sendo utilizado dentro do AdminCTRL
 public class CadastroUser extends Dialog<User>{
     
     @FXML
     private TextField insNome, insMail;
     @FXML
-    private RadioButton insAdmin, insUser, insClient;
-
+    private ToggleGroup cargo = new ToggleGroup();
+    @FXML
+    private RadioButton insAdmin = new RadioButton("Administrador"), 
+                        insUser = new RadioButton("Usuario"), 
+                        insClient = new RadioButton("Cliente");
+    
+    //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela
     public CadastroUser(){
 
         try {
@@ -38,27 +46,14 @@ public class CadastroUser extends Dialog<User>{
 
             setResultConverter(dialogButton -> {
                 if(dialogButton == confirm) {
-                    if (insAdmin.isSelected()) {
-                        return new User(
-                            insNome.getText(),
-                            insMail.getText(), 
-                            Permissoes.ADMINISTRADOR
-                        );
-                    }if (insUser.isSelected()) {
-                        return new User(
-                            insNome.getText(),
-                            insMail.getText(), 
-                            Permissoes.USUARIO
-                        );                       
-                    }if (insClient.isSelected()) {
-                        return new User(
-                            insNome.getText(),
-                            insMail.getText(), 
-                            Permissoes.CLIENTE
-                        );
-                    }else{
-                        return null;
-                    }
+                    RadioButton selCargo = (RadioButton) cargo.getSelectedToggle();
+                    
+                    return new User(
+                        insNome.getText(),
+                        insMail.getText(), 
+                        Permissoes.valueOf(selCargo.getText().toUpperCase())
+                    );
+                    
                 }else{
                     return null;
                 }

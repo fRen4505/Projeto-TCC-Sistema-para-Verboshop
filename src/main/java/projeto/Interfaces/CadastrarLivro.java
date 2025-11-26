@@ -11,11 +11,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ButtonBar.ButtonData;
 import projeto.System.Models.Livro;
 
+//Classe tipo Dialog (tela pop-up) do JavaFX para inserção de dados usados no cadastro de um novo livro,
+//sendo utilizada dentro do AdminCTRL
 public class CadastrarLivro extends Dialog<Livro>{
     
     @FXML
     private TextField insTitulo, insAutor, insEdit, insPreco, insCode, insQtnd;
     
+    //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela
     public CadastrarLivro(){
 
         try {

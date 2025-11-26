@@ -19,9 +19,10 @@ public class Main extends Application{
     
     private final Logger log = LoggerFactory.getLogger(Main.class);
 
+    //Metodo padrão para iniciar Application do JavaFX, 
+    //neste caso vendo se há usuario loggado ou não e redirecionando seja para login ou para tela inicial
     @Override
     public void start(Stage stage) {
-
         if (Sessao.getUser() == null) {
             new Login(stage);
         }else{
@@ -29,17 +30,19 @@ public class Main extends Application{
         }
     }
 
+    //Metodo para acessar atela inicial, depois de loggado
     public void entrar(Stage stage){
         
         Parent root;
         FXMLLoader loader;
         Scene cena;
 
+        //seleciona quais interfaces/controllers o usuario tera acesso de acordo com sua função
         switch (Sessao.getUser().getFunção()) {
 
             case ADMINISTRADOR:
                 try {
-                    log.info("administrador: " + Sessao.getUser().getNome() + " loggou");
+                    log.info("Administrador: " + Sessao.getUser().getNome() + " loggou");
                     AdminCTRL adminLog = new AdminCTRL(Sessao.getUser(), stage);
 
                     loader = new FXMLLoader(getClass().getResource("/GUIs/AdminGUI.fxml"));
@@ -62,7 +65,7 @@ public class Main extends Application{
 
             case USUARIO:
                 try {
-                    log.info("usuario: " + Sessao.getUser().getNome() + " loggou");
+                    log.info("Usuario: " + Sessao.getUser().getNome() + " loggou");
                     UserCTRL userLog = new UserCTRL(Sessao.getUser(), stage);
                             
                     loader = new FXMLLoader(getClass().getResource("/GUIs/UserGUI.fxml"));
@@ -84,12 +87,12 @@ public class Main extends Application{
                 break;
                 
             default:
-            
                 break;
         }
 
+        // Metodo/gerenciador de eventos que executa um JOptionPane caso o usuario tente fechar a tela pelo X,
+        // para confirmar se este realmente quer sair e o sistema preparar o envio do relatorio
         stage.setOnCloseRequest( new EventHandler<WindowEvent>() {
-
             @Override
             public void handle(WindowEvent arg0) {
                 String[] vals = {"sim", "não"};
