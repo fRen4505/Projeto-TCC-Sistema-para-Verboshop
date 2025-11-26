@@ -143,6 +143,8 @@ public class PedidoPane {
             if(opt == "sim") {
                 dao.entreguePedido(insPedido.getIDpedido());
 
+                cancelar.setDisable(true);
+
                 entregue.setText("Entregue");
                 entregue.setDisable(true);
                 entregue.setStyle("-fx-background-color: #0fa600");
@@ -163,25 +165,25 @@ public class PedidoPane {
     //ao cancelar o pedido todos os livros encomendados (suas quantidades) retornam ao estoque e apos isso o pedido é deletado do sistema
     public void pedidoCancelar(ActionEvent e){
         try {
-            String[] vals = {"sim", "não"};
-            String opt = (String)JOptionPane.showInputDialog(null, 
-                "Deseja mesmo cancelar o pedido?",
-                "Cancelar", 
-                2, 
-                null, 
-                vals,vals[1]
-            );
-            if(opt.equals("sim")) {
-                if (insPedido.getEntregue() != 1) {
+            if (insPedido.getEntregue() != 1) {
+                String[] vals = {"sim", "não"};
+                String opt = (String)JOptionPane.showInputDialog(null, 
+                    "Deseja mesmo cancelar o pedido?",
+                    "Cancelar", 
+                    2, 
+                    null, 
+                    vals,vals[1]
+                );
+                if(opt.equals("sim")) {
                     this.dao.cancelarPedido(insPedido.getIDpedido());    
-                }else{
-                    JOptionPane.showMessageDialog(
-                        null, 
-                        "Erro, pedido ja foi entregue, não se pode cancelar",
-                        "Pedido ja entregue", 
-                        2
-                    );
                 }
+            }else{
+                JOptionPane.showMessageDialog(
+                    null, 
+                    "Erro, pedido ja foi entregue, não se pode cancelar",
+                    "Pedido ja entregue", 
+                    2
+                );
             }
             
         } catch (SQLException e1) {

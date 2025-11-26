@@ -46,35 +46,43 @@ public class CadastroUser extends Dialog<User>{
 
             setResultConverter(dialogButton -> {
                 if(dialogButton == confirm) {
-                    RadioButton selCargo = (RadioButton) cargo.getSelectedToggle();
-                    
-                    return new User(
-                        insNome.getText(),
-                        insMail.getText(), 
-                        Permissoes.valueOf(selCargo.getText().toUpperCase())
-                    );
-                    
+                    try {
+                        RadioButton selCargo = (RadioButton) cargo.getSelectedToggle();
+                        return new User(
+                            insNome.getText(),
+                            insMail.getText(), 
+                            Permissoes.valueOf(selCargo.getText().toUpperCase())
+                        );
+                    }catch(IllegalArgumentException e1){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Erro por valor errado, cadastro cancelado \n motivo: "+e1.getMessage(),
+                            "Erro", 
+                            0
+                        );
+                        return null;
+                    }catch(NullPointerException e3){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Erro por função estar faltando, cadastro cancelado \n motivo: "+e3.getMessage(),
+                            "Erro", 
+                            0
+                        );
+                        return null;
+                    }
                 }else{
                     return null;
                 }
             });
             
-        }catch (IOException e1) {
+        }catch (IOException e2) {
             JOptionPane.showMessageDialog(
                 null, 
-                "Erro por "+e1.getMessage() + ", cadastro cancelado",
+                "Erro por "+e2.getMessage() + ", cadastro cancelado",
                 "Erro", 
                 0
             );       
-        }catch(NullPointerException e2){
-            JOptionPane.showMessageDialog(
-                null, 
-                "Erro por valor errado ou vazio, cadastro cancelado \n motivo: "+e2.getMessage(),
-                "Erro", 
-                0
-            );  
         }
-
     }
     
 }

@@ -10,7 +10,7 @@ public class CodigoISBN {
         return ISBN;
     }
 
-    public CodigoISBN(String codeIns){
+    public CodigoISBN(String codeIns) throws IllegalArgumentException{
         if (ISBNValidator.getInstance().isValid(codeIns) == true) {
             this.ISBN = codeIns;    
         }else{

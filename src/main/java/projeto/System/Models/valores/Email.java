@@ -10,7 +10,7 @@ public class Email {
         return email;
     }
     
-    public Email(String insMail){
+    public Email(String insMail) throws IllegalArgumentException{
         if (EmailValidator.getInstance().isValid(insMail)) {
             this.email = insMail;
         } else {

@@ -15,7 +15,6 @@ import javafx.scene.layout.Pane;
 import projeto.Sessao;
 import projeto.System.AdminDAO;
 import projeto.System.Models.User;
-import projeto.System.Models.valores.Permissoes;
 
 //Classe tipo Pane (painel) do JavaFX para organização e exibição dos dados de um Usuario cadastrado,
 //disponibilizando tambem metodos para gestão deste, como alterar e deletar,

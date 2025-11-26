@@ -12,32 +12,24 @@ public class User {
     private UUID ID;
 
     public User(String insNome, String insEmail, Permissoes insPermissão){
-        try {
-            if(insNome != "" && insEmail != "") {
-                this.Nome = insNome;
-                this.Email = new Email(insEmail); 
-                this.Função = insPermissão;
-                this.ID = UUID.randomUUID();
-            }
-        }catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Dados inseridos para usuario são invalidos \n" + e.getMessage());
-        }catch (NullPointerException e) {
-            throw new NullPointerException("Falta de dados para usuario \n" + e.getMessage());
+        if(insNome != "" && insEmail != "") {
+            this.Nome = insNome;
+            this.Email = new Email(insEmail); 
+            this.Função = insPermissão;
+            this.ID = UUID.randomUUID();
+        }else{
+            throw new IllegalArgumentException("Dados inseridos para usuario são invalidos \n");
         }
     }
 
     public User(String insNome, String insEmail, String insID, Permissoes insPermissão){
-        try {
-            if(insNome != "" && insEmail != "" && insID != "") {
-                this.Nome = insNome;
-                this.Email = new Email(insEmail); 
-                this.Função = insPermissão;
-                this.ID = UUID.fromString(insID);
-            }
-        }catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Dados inseridos para usuario são invalidos \n" + e.getMessage());
-        }catch (NullPointerException e) {
-            throw new NullPointerException("Falta de dados para usuario \n" + e.getMessage());
+        if(insNome != "" && insEmail != "" && insID != "") {
+            this.Nome = insNome;
+            this.Email = new Email(insEmail); 
+            this.Função = insPermissão;
+            this.ID = UUID.fromString(insID);
+        }else {
+            throw new IllegalArgumentException("Dados inseridos para usuario são invalidos \n");
         }
     }
 

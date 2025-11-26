@@ -35,14 +35,32 @@ public class CadastrarLivro extends Dialog<Livro>{
 
             setResultConverter(dialogButton -> {
                 if (dialogButton == confirm) {
-                    return new Livro(
-                        insTitulo.getText(),
-                        insAutor.getText(), 
-                        insEdit.getText(), 
-                        Double.parseDouble(insPreco.getText().replace(',', '.')), 
-                        Integer.parseInt(insQtnd.getText()),
-                        insCode.getText()
-                    );
+                    try {
+                        return new Livro(
+                            insTitulo.getText(),
+                            insAutor.getText(), 
+                            insEdit.getText(), 
+                            Double.parseDouble(insPreco.getText().replace(',', '.')), 
+                            Integer.parseInt(insQtnd.getText()),
+                            insCode.getText()
+                        );   
+                    }catch(NumberFormatException e2){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Erro por valor errado ou vazio, cadastro cancelado \n motivo: não inseriu quantidade \t"+e2.getMessage(),
+                            "Erro", 
+                            0
+                        );
+                        return null;
+                    }catch(IllegalArgumentException e3){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Erro por valor errado, cadastro cancelado \n motivo: "+e3.getMessage(),
+                            "Erro", 
+                            0
+                        );
+                        return null;
+                    }
                 }else{
                     return null;
                 }
@@ -55,15 +73,7 @@ public class CadastrarLivro extends Dialog<Livro>{
                 "Erro", 
                 0
             );       
-        }catch(NumberFormatException e2){
-            JOptionPane.showMessageDialog(
-                null, 
-                "Erro por valor errado ou vazio, cadastro cancelado \n motivo: "+e2.getMessage(),
-                "Erro", 
-                0
-            );  
         }
-
     }
 
 }

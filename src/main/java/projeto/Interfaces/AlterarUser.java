@@ -2,6 +2,8 @@ package projeto.Interfaces;
 
 import javafx.scene.control.Dialog;
 
+import java.io.IOException;
+
 import javax.swing.JOptionPane;
 
 import javafx.fxml.FXML;
@@ -27,8 +29,6 @@ public class AlterarUser extends Dialog<User>{
     private RadioButton altUser = new RadioButton("Usuario"), 
                         altAdmin = new RadioButton("Administrador");
 
-    Permissoes funcao;
-
     //Contrutor da classe, carrega o layout (o fxml) e inclui os componentes da tela, completando os dados com o informções do usuario
     public AlterarUser(User usr){
 
@@ -46,10 +46,6 @@ public class AlterarUser extends Dialog<User>{
             if (usr.getFunção() == Permissoes.CLIENTE) {
                 altAdmin.setVisible(false);
                 altUser.setVisible(false);
-                funcao = Permissoes.CLIENTE;
-            }else{
-                RadioButton selCargo = (RadioButton) cargo.getSelectedToggle();
-                funcao = Permissoes.valueOf(selCargo.getText().toUpperCase());
             }
 
             ButtonType confirm = new ButtonType("Alterar", ButtonData.OK_DONE);
@@ -58,26 +54,44 @@ public class AlterarUser extends Dialog<User>{
 
             this.setResultConverter(dialogButton -> {
                 if(dialogButton == confirm) {
-
-                    return new User(
-                        altNome.getText(),
-                        altMail.getText(), 
-                        funcao
-                    );
-
+                    try {
+                        if (usr.getFunção() != Permissoes.CLIENTE) {
+                            RadioButton selCargo = (RadioButton) cargo.getSelectedToggle();
+                            return new User(
+                                altNome.getText(),
+                                altMail.getText(), 
+                                Permissoes.valueOf(selCargo.getText().toUpperCase())
+                            );   
+                        }else{
+                            return new User(
+                                altNome.getText(),
+                                altMail.getText(), 
+                                Permissoes.CLIENTE
+                            );   
+                        } 
+                    }catch(IllegalArgumentException e1){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Erro por valor errado, alteração cancelada \n motivo: "+e1.getMessage(),
+                            "Erro", 
+                            0
+                        );
+                        return null;
+                    }catch(NullPointerException e3){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Erro por função estar faltando, alteração cancelada \n motivo: "+e3.getMessage(),
+                            "Erro", 
+                            0
+                        );
+                        return null;
+                    }
                 }else{
                     return null;
                 }
             });
-
-        }catch (NullPointerException e1) {
-            JOptionPane.showMessageDialog(
-                null, 
-                "Erro, alteração cancelada, motivo: "+e1.getMessage() ,
-                "Erro", 
-                0
-            );    
-        }catch (Exception e2) {
+   
+        }catch (IOException e2) {
             JOptionPane.showMessageDialog(
                 null, 
                 "Erro, alteração cancelada, motivo: "+e2.getMessage() ,

@@ -9,7 +9,7 @@ public class Dinheiro {
     private Currency real = Currency.getInstance("BRL");
     private BigDecimal quantia;
 
-    public Dinheiro(Double insQuantia){
+    public Dinheiro(Double insQuantia) throws IllegalArgumentException{
         if (insQuantia > 0) {
             BigDecimal tempVal = new BigDecimal(insQuantia);
             this.quantia = tempVal.setScale(real.getDefaultFractionDigits(), RoundingMode.HALF_EVEN);
@@ -19,7 +19,7 @@ public class Dinheiro {
         }
     }
 
-    public void novaQuantia(double insQuantia) {
+    public void novaQuantia(double insQuantia) throws IllegalArgumentException{
         if (insQuantia >= 0) {
             BigDecimal tempVal = new BigDecimal(insQuantia);
             this.quantia = tempVal.setScale(real.getDefaultFractionDigits());

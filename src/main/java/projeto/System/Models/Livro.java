@@ -12,37 +12,28 @@ public class Livro {
     private Dinheiro Preço;
     private Integer Quantidade = 0;
 
-    public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, String insCodigo) {
-        try {
-            if (insTitulo != "" && insAutor != "" && insEdit != "" && insCodigo != "") {
-                this.Titulo = insTitulo;
-                this.Autor = insAutor;
-                this.Editora = insEdit;
-                this.Preço = new Dinheiro(insPreço);
-                this.ISBN = new CodigoISBN(insCodigo);
-            }
-        }catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Dados inseridos para livro são invalidos \n" + e.getMessage());
-        }catch (NullPointerException e) {
-            throw new NullPointerException("Falta de dados para livro \n" + e.getMessage());
-        }
+    public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, String insCodigo) throws IllegalArgumentException{
+        if (insTitulo != "" && insAutor != "" && insEdit != "" && insCodigo != "") {
+            this.Titulo = insTitulo;
+            this.Autor = insAutor;
+            this.Editora = insEdit;
+            this.Preço = new Dinheiro(insPreço);
+            this.ISBN = new CodigoISBN(insCodigo);
+        }else{
+            throw new IllegalArgumentException("Dados inseridos para livro são invalidos \n");
+        }        
     }
 
-    public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, Integer insQtnd) {
-        try {
-            if (insTitulo != "" && insAutor != "" &&  insEdit!= "") {
-                this.Titulo = insTitulo;
-                this.Autor = insAutor;
-                this.Editora = insEdit;
-                this.Preço = new Dinheiro(insPreço);
-                this.Quantidade = insQtnd;
-            } 
-        }catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Dados inseridos para livro são invalidos \n" + e.getMessage());
-        }catch (NullPointerException e) {
-            throw new NullPointerException("Falta de dados para livro \n" + e.getMessage());
-        }
-               
+    public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, Integer insQtnd) throws IllegalArgumentException{
+        if (insTitulo != "" && insAutor != "" &&  insEdit!= "") {
+            this.Titulo = insTitulo;
+            this.Autor = insAutor;
+            this.Editora = insEdit;
+            this.Preço = new Dinheiro(insPreço);
+            this.Quantidade = insQtnd;
+        }else{
+            throw new IllegalArgumentException("Dados inseridos para livro são invalidos \n");
+        } 
     }
 
     public Livro(String insTitulo, String insAutor, String insEdit, double insPreço, Integer insQtnd, String insCodigo) {

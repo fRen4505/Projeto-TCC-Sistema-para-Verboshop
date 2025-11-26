@@ -1,5 +1,7 @@
 package projeto.Interfaces;
 
+import java.io.IOException;
+
 import javax.swing.JOptionPane;
 
 import javafx.event.ActionEvent;
@@ -48,19 +50,37 @@ public class AlterarLivro extends Dialog<Livro>{
 
             setResultConverter(dialogButton -> {
                 if (dialogButton == confirm) {
-                    return new Livro(
-                        altTitulo.getText(),
-                        altAutor.getText(), 
-                        altEdit.getText(), 
-                        Double.parseDouble(altPreco.getText().replace(',', '.').substring(altPreco.getText().indexOf(" ") + 1)), 
-                        Integer.parseInt(qtnd.getText())
-                    );
-                } else {
+                    try{
+                        return new Livro(
+                            altTitulo.getText(),
+                            altAutor.getText(), 
+                            altEdit.getText(), 
+                            Double.parseDouble(altPreco.getText().replace(',', '.').substring(altPreco.getText().indexOf(" ") + 1)), 
+                            Integer.parseInt(qtnd.getText())
+                        );
+                    }catch(NumberFormatException e2){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Erro por valor errado ou vazio, alteração cancelado \n motivo: não inseriu quantidade \t"+e2.getMessage(),
+                            "Erro", 
+                            0
+                        );
+                        return null;
+                    }catch(IllegalArgumentException e3){
+                        JOptionPane.showMessageDialog(
+                            null, 
+                            "Erro por valor errado, alteração cancelado \n motivo: "+e3.getMessage(),
+                            "Erro", 
+                            0
+                        );
+                        return null;
+                    }
+                }else{
                     return ins;
                 }
             });
 
-        } catch (Exception e1) {
+        } catch (IOException e1) {
             JOptionPane.showMessageDialog(
                 null, 
                 "Erro por "+e1.getMessage() + ", alteração cancelada",

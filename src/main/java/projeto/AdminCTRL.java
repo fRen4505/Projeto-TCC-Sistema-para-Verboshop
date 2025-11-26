@@ -323,20 +323,6 @@ public class AdminCTRL {
                     "Erro", 
                     0
                 ); 
-            }catch (NullPointerException e1) {
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "Falha a cadastrar livro por falta de dados",
-                    "Erro", 
-                    0
-                ); 
-            }catch (IllegalArgumentException e1) {
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "Falha a cadastrar livro por dados errados \nMotivo: "+e1.getMessage(),
-                    "Erro", 
-                    0
-                ); 
             }
         });
         
