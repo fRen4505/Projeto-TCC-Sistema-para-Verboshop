@@ -6,23 +6,25 @@
             <defaultValue>unknown</defaultValue>
         </discriminator>
 
+       
         <sift>
             <appender name="EMAIL-${email}" class="ch.qos.logback.classic.net.SMTPAppender">
-                <smtpHost>smtp.maileroo.com</smtpHost>
-                <smtpPort>2525</smtpPort>
+                <smtpHost> INSERIR HOST</smtpHost>
+                <smtpPort> INSERIR PORT</smtpPort>
 
-                <username>relatorio.estoque@b4e3c0ffb8517f96.maileroo.org</username>
-                <password>a95e03594d9fda8fcad787df</password>
+                <username> INSERIR USUARIO DO HOST</username>
+                <password> SENHA DE USUARIO</password>
 
                 <STARTTLS>true</STARTTLS>
             
                 <to>${email}</to>
-                <from>relatorio.estoque@b4e3c0ffb8517f96.maileroo.org</from>
+                <from> ENDEREÇO DADO PELO HOST</from>
                 <subject>Relatório Estoque [%date]</subject>
 
                 <layout class="projeto.System.Services.RelatorioLayout" />
             </appender>
         </sift>
+        
     </appender>
 
     <root level="INFO">

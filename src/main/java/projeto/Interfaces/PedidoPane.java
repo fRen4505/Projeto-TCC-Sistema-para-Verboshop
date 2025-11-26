@@ -66,6 +66,7 @@ public class PedidoPane {
             if (insPed.getEntregue() == 1) {
                 entregue.setText("Entregue");
                 entregue.setDisable(true);
+                cancelar.setDisable(true);
                 entregue.setStyle("-fx-background-color: #0fa600");
             }
 
@@ -171,7 +172,16 @@ public class PedidoPane {
                 vals,vals[1]
             );
             if(opt.equals("sim")) {
-                this.dao.cancelarPedido(insPedido.getIDpedido());    
+                if (insPedido.getEntregue() != 1) {
+                    this.dao.cancelarPedido(insPedido.getIDpedido());    
+                }else{
+                    JOptionPane.showMessageDialog(
+                        null, 
+                        "Erro, pedido ja foi entregue, não se pode cancelar",
+                        "Pedido ja entregue", 
+                        2
+                    );
+                }
             }
             
         } catch (SQLException e1) {
